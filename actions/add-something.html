@@ -1,15 +1,41 @@
-<span>
+<style>
+    .hint {
+        position: absolute;
+        background-color: skyblue;
+        top:-1.40em;
+        left:0;
+        padding: .2em;
+        opacity: 0;
+        transition: all 500ms;
+        z-index: 0;
+    }
+    button:hover .hint {
+        opacity: 1;
+    }
+    button {
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+    }
+</style>
+<div>
     <p>
         Let's get something new. You can start with a link to a unique resource identifier (URI), 
         a well-described file (RDF-XML, JSON-LD), or just start with a new blank record.
         <a href="#adding-records" class="popover">learn more</a>
     </p>
-    <button role="button">I have a URI<span>taco</span></button>
-    <button role="button">I have a RDF address</button>
-    <button role="button">I have an id for a JSON-LD file</button>
+    <button role="button">I have a URI
+        <span class="hint">https://example/id/442</span>
+    </button>
+    <button role="button">I have an RDF address or XML record
+        <span class="hint">https://example/id/442.xml</span>
+    </button>
+    <button role="button">I have an id for a JSON-LD file
+        <span class="hint">https://example/id/442.json</span>
+    </button>
     <p>
         To start with just a page or image from the web, or to simply describe somethign that has 
         not been represented on the Internet, create soemthing new.
     </p> 
     <button role="button">Something New</button>
-</span>
+</div>
