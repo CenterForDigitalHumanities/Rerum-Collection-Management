@@ -1,0 +1,29 @@
+{
+  "@context": "../schemas/rcm-context.jsonld",
+  "@graph": [
+    {
+      "@id": "tag:rcm.example,2026:thing/unknown-portrait-person",
+      "@type": [
+        "rcm:Thing",
+        "rcm:Lacuna",
+        "foaf:Person"
+      ],
+      "rdfs:label": "Unidentified portrait person"
+    },
+    {
+      "@id": "tag:rcm.example,2026:annotation/depiction-from-fragment-001",
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:identifying",
+      "oa:hasTarget": "tag:rcm.example,2026:thing/unknown-portrait-person",
+      "oa:hasBody": {
+        "@type": "rcm:PropertyAssertion",
+        "rcm:predicate": "foaf:depiction",
+        "rcm:object": "http://t-pen.org/TPEN/canvas/13205675#xywh=380,22,27,43"
+      },
+      "rcm:evidence": [
+        "http://t-pen.org/TPEN/canvas/13205675#xywh=380,22,27,43"
+      ],
+      "dcterms:creator": "tag:rcm.example,2026:agent/annotator-001"
+    }
+  ]
+}
