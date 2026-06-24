@@ -1,0 +1,63 @@
+{
+  "@context": "../schemas/rcm-context.jsonld",
+  "@graph": [
+    {
+      "@id": "tag:rcm.example,2026:thing/letter-1918-001",
+      "@type": [
+        "rcm:Thing",
+        "crm:E22_Human-Made_Object"
+      ],
+      "rdfs:label": "Letter referenced as WWI correspondence, 1918"
+    },
+    {
+      "@id": "tag:rcm.example,2026:agent/allen-l-gooch",
+      "@type": [
+        "foaf:Person",
+        "rcm:Thing"
+      ],
+      "rdfs:label": "Allen L. Gooch"
+    },
+    {
+      "@id": "tag:rcm.example,2026:agent/unnamed-sergeant-from-hachita",
+      "@type": [
+        "foaf:Person",
+        "rcm:Lacuna",
+        "rcm:Thing"
+      ],
+      "rdfs:label": "Unnamed sergeant from Hachita referenced in 1918 letter"
+    },
+    {
+      "@id": "tag:rcm.example,2026:collection/wwi-correspondence",
+      "@type": [
+        "rcm:Collection",
+        "schema:Collection"
+      ],
+      "rdfs:label": "WWI Correspondence Research Collection"
+    },
+    {
+      "@id": "tag:rcm.example,2026:annotation/creator-assertion-001",
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:describing",
+      "oa:hasTarget": "tag:rcm.example,2026:thing/letter-1918-001",
+      "oa:hasBody": {
+        "@type": "rcm:PropertyAssertion",
+        "rcm:predicate": "dc:creator",
+        "rcm:object": "tag:rcm.example,2026:agent/allen-l-gooch"
+      },
+      "dcterms:creator": "tag:rcm.example,2026:agent/researcher-001",
+      "dcterms:created": "2026-06-23T00:00:00Z",
+      "rcm:evidence": [
+        "https://example.org/letter-image#signature",
+        "https://example.org/transcription#line-final"
+      ]
+    },
+    {
+      "@id": "tag:rcm.example,2026:annotation/collection-membership-001",
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:classifying",
+      "oa:hasTarget": "tag:rcm.example,2026:collection/wwi-correspondence",
+      "oa:hasBody": "tag:rcm.example,2026:thing/letter-1918-001",
+      "dcterms:creator": "tag:rcm.example,2026:agent/curator-001"
+    }
+  ]
+}

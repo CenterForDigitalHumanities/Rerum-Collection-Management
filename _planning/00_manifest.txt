@@ -1,0 +1,20 @@
+RERUM Collection Management Planning Artifact
+Generated: 2026-06-23
+
+This archive captures the conceptual basis, JSON-LD starter context, annotation profiles, examples, diagrams, and development plan for RCM.
+
+The package intentionally includes expansive notes, alternative paths, and speculative architecture. It should be treated as a planning seed for the repository's _planning folder.
+
+Important assumptions captured:
+- RCM is not a parish-specific project. Parish/authority work is only a possible downstream use case.
+- RCM should work like a semantic, annotation-first cousin of Zotero/Omeka/Tropy, but not clone them.
+- RCM prioritizes JSON-LD, Web Annotation, IIIF, Dublin Core, FOAF, GeoJSON-LD, CIDOC CRM, schema.org, and broader RDF compatibility.
+- RCM should support virtual collections where original resources remain elsewhere.
+- RCM should use non-destructive annotation to describe resources, concepts, relationships, evidence, collections, and publication events.
+- RERUM is the preferred store for data and annotations.
+- LDN inbox publication/announcement should be treated as a first-class export/publishing mode.
+- Scholarly annotations should not encode numeric confidence. Human assertions should carry evidence, attribution, date, motivation, and provenance. Numeric confidence is reserved for machine-generated guesses.
+- A FRBR-esque distinction between Thing / Representation / Expression / Annotation is foundational.
+- The system should support lacunae/placeholders: entities evidenced by references even without authority records, images, or catalog records.
+- Long-term UI should support maps, genealogies, networks, PDF, A/V, IIIF, text, 3D models, and custom visualizers.
+- React/TypeScript may be acceptable for an MVP, but the domain architecture should not be React-bound.

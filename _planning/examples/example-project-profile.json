@@ -1,0 +1,53 @@
+{
+  "@context": "../schemas/rcm-context.jsonld",
+  "id": "example-project-profile",
+  "type": "rcm:ProjectProfile",
+  "label": "Example RCM Project Profile",
+  "principle": "maximum minimum: a specific interface over a generic linked-data core",
+  "fields": [
+    {
+      "key": "rdfs:label",
+      "label": "Display label",
+      "required": true,
+      "input": "text",
+      "help": "A navigational label; not necessarily a strong identity claim."
+    },
+    {
+      "key": "rdf:type",
+      "label": "Entity type",
+      "required": false,
+      "input": "controlled-term",
+      "options": [
+        "rcm:Thing",
+        "rcm:Lacuna",
+        "foaf:Person",
+        "schema:Place",
+        "schema:Product",
+        "crm:E5_Event"
+      ]
+    },
+    {
+      "key": "rcm:evidenceClass",
+      "label": "Evidence class",
+      "required": false,
+      "input": "controlled-term",
+      "options": [
+        "rcm:ExistentialEvidence",
+        "rcm:TransitionalEvidence",
+        "rcm:ObjectiveEvidence",
+        "rcm:CreatorAssertion"
+      ]
+    }
+  ],
+  "service": {
+    "read": "https://store.rerum.io/v1/id/",
+    "write": "https://tiny.rerum.io/"
+  },
+  "templates": [
+    "entity",
+    "annotation-list",
+    "collection",
+    "map",
+    "network"
+  ]
+}
