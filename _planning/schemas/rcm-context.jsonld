@@ -1,0 +1,66 @@
+{
+  "@context": {
+    "id": "@id",
+    "type": "@type",
+    "rcm": "https://rerum.io/ns/rcm#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "oa": "http://www.w3.org/ns/oa#",
+    "as": "https://www.w3.org/ns/activitystreams#",
+    "ldp": "http://www.w3.org/ns/ldp#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "schema": "https://schema.org/",
+    "crm": "http://www.cidoc-crm.org/cidoc-crm/",
+    "iiif": "http://iiif.io/api/presentation/3#",
+    "geojson": "https://purl.org/geojson/vocab#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "label": "rdfs:label",
+    "creator": "dcterms:creator",
+    "created": {
+      "@id": "dcterms:created",
+      "@type": "xsd:dateTime"
+    },
+    "modified": {
+      "@id": "dcterms:modified",
+      "@type": "xsd:dateTime"
+    },
+    "body": "oa:hasBody",
+    "target": "oa:hasTarget",
+    "motivation": "oa:motivatedBy",
+    "evidence": {
+      "@id": "rcm:evidence",
+      "@type": "@id"
+    },
+    "predicate": {
+      "@id": "rcm:predicate",
+      "@type": "@id"
+    },
+    "object": {
+      "@id": "rcm:object",
+      "@type": "@id"
+    },
+    "represents": {
+      "@id": "rcm:represents",
+      "@type": "@id"
+    },
+    "hasRepresentation": {
+      "@id": "rcm:hasRepresentation",
+      "@type": "@id"
+    },
+    "isExpressionOf": {
+      "@id": "rcm:isExpressionOf",
+      "@type": "@id"
+    },
+    "memberOf": {
+      "@id": "schema:isPartOf",
+      "@type": "@id"
+    },
+    "confidence": "rcm:confidence",
+    "model": "rcm:model"
+  }
+}

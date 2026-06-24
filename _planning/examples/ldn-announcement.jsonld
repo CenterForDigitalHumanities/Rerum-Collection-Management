@@ -1,0 +1,12 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "../schemas/rcm-context.jsonld"
+  ],
+  "@type": "Announce",
+  "actor": "tag:rcm.example,2026:agent/project-001",
+  "object": "tag:rcm.example,2026:collection/wwi-correspondence",
+  "target": "https://rerum.example.org/inbox",
+  "summary": "Published an RCM collection assembled through annotation.",
+  "published": "2026-06-23T00:00:00Z"
+}

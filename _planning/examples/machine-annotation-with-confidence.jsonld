@@ -1,0 +1,13 @@
+{
+  "@context": "../schemas/rcm-context.jsonld",
+  "@type": "oa:Annotation",
+  "oa:motivatedBy": "oa:tagging",
+  "oa:hasTarget": "https://example.org/image/001.jpg#xywh=100,100,500,300",
+  "oa:hasBody": {
+    "@type": "rcm:MachineTag",
+    "rdfs:label": "handwritten signature",
+    "rcm:confidence": 0.82,
+    "rcm:model": "example-vision-model-v0"
+  },
+  "dcterms:creator": "tag:rcm.example,2026:agent/machine-pipeline-001"
+}

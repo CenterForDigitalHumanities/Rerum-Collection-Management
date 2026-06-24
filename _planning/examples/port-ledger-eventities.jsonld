@@ -1,0 +1,84 @@
+{
+  "@context": "../schemas/rcm-context.jsonld",
+  "@graph": [
+    {
+      "@id": "tag:rcm.example,2026:source/port-ledger-page-001",
+      "@type": [
+        "rcm:Representation",
+        "schema:DigitalDocument"
+      ],
+      "rdfs:label": "Port ledger page with receipt records"
+    },
+    {
+      "@id": "tag:rcm.example,2026:event/receipt-001",
+      "@type": [
+        "rcm:Thing",
+        "schema:Event",
+        "crm:E5_Event"
+      ],
+      "rdfs:label": "Receipt of 12 dozen pineapples by Mr. Finan"
+    },
+    {
+      "@id": "tag:rcm.example,2026:event/receipt-002",
+      "@type": [
+        "rcm:Thing",
+        "schema:Event",
+        "crm:E5_Event"
+      ],
+      "rdfs:label": "Receipt of 1024 hyB. pharons by r900"
+    },
+    {
+      "@id": "tag:rcm.example,2026:thing/pharons",
+      "@type": [
+        "rcm:Thing",
+        "rcm:Lacuna",
+        "rcm:Eventity"
+      ],
+      "rdfs:label": "pharons"
+    },
+    {
+      "@id": "tag:rcm.example,2026:agent/r900",
+      "@type": [
+        "rcm:Thing",
+        "rcm:Lacuna",
+        "foaf:Agent",
+        "rcm:Eventity"
+      ],
+      "rdfs:label": "r900"
+    },
+    {
+      "@id": "tag:rcm.example,2026:annotation/entity-birth-pharons-001",
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:identifying",
+      "oa:hasTarget": {
+        "source": "tag:rcm.example,2026:source/port-ledger-page-001",
+        "selector": {
+          "type": "TextQuoteSelector",
+          "exact": "1024 hyB. pharons received by r900"
+        }
+      },
+      "oa:hasBody": "tag:rcm.example,2026:thing/pharons",
+      "dcterms:creator": "tag:rcm.example,2026:agent/researcher-001",
+      "dcterms:created": "2026-06-23T00:00:00Z",
+      "rcm:evidence": [
+        "tag:rcm.example,2026:source/port-ledger-page-001"
+      ]
+    },
+    {
+      "@id": "tag:rcm.example,2026:annotation/responsible-description-pharons-001",
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:describing",
+      "oa:hasTarget": "tag:rcm.example,2026:thing/pharons",
+      "oa:hasBody": {
+        "@type": "rcm:PropertyAssertion",
+        "rcm:predicate": "rdf:type",
+        "rcm:object": "schema:Product"
+      },
+      "dcterms:creator": "tag:rcm.example,2026:agent/researcher-001",
+      "dcterms:created": "2026-06-23T00:00:00Z",
+      "rcm:evidence": [
+        "tag:rcm.example,2026:source/port-ledger-page-001"
+      ]
+    }
+  ]
+}

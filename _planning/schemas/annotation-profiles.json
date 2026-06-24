@@ -1,0 +1,83 @@
+{
+  "note": "Planning profile sketches. Not final schema validation.",
+  "principles": [
+    "Human annotations use evidence and attribution, not numeric confidence.",
+    "Machine annotations may include confidence when they represent probabilistic guesses.",
+    "Collections are assembled through annotations, not static containment only.",
+    "Remote resources are annotated non-destructively."
+  ],
+  "profiles": [
+    {
+      "id": "PropertyAssertion",
+      "motivation": "oa:describing",
+      "required": [
+        "target",
+        "body.predicate",
+        "body.object",
+        "creator"
+      ]
+    },
+    {
+      "id": "RelationshipAssertion",
+      "motivation": "oa:linking",
+      "required": [
+        "target",
+        "body.predicate",
+        "body.object",
+        "creator"
+      ]
+    },
+    {
+      "id": "CollectionMembership",
+      "motivation": "oa:classifying",
+      "required": [
+        "target(collection)",
+        "body(item)",
+        "creator"
+      ]
+    },
+    {
+      "id": "RepresentationLink",
+      "motivation": "oa:linking",
+      "required": [
+        "target(thing)",
+        "body.representation"
+      ]
+    },
+    {
+      "id": "ConceptTagging",
+      "motivation": "oa:tagging",
+      "required": [
+        "target",
+        "body(concept)"
+      ]
+    },
+    {
+      "id": "Challenge",
+      "motivation": "oa:questioning",
+      "required": [
+        "target(annotation)",
+        "body"
+      ]
+    },
+    {
+      "id": "MachineAnnotation",
+      "motivation": "oa:tagging",
+      "allowed": [
+        "confidence",
+        "model",
+        "runId",
+        "reviewStatus"
+      ]
+    },
+    {
+      "id": "LDNAnnouncement",
+      "type": "as:Announce",
+      "required": [
+        "actor",
+        "object",
+        "target"
+      ]
+    }
+  ]
+}
