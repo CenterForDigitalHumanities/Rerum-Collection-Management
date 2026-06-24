@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM MachineAnnotation Body",
+  "description": "Annotation body for machine-generated annotations. May include numeric confidence.",
+  "type": "object",
+  "required": ["@type"],
+  "properties": {
+    "@type": {
+      "type": "string",
+      "const": "rcm:MachineAnnotation"
+    },
+    "rcm:entity": {
+      "type": "string",
+      "format": "uri"
+    },
+    "rcm:type": {
+      "type": "string"
+    },
+    "rcm:confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "rcm:generator": {
+      "type": "string",
+      "description": "The tool or model that generated this annotation."
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM Thing",
+  "description": "An abstract identity anchor for a cultural heritage entity.",
+  "type": "object",
+  "required": ["@id"],
+  "properties": {
+    "@context": {
+      "type": ["string", "object", "array"]
+    },
+    "@id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "@type": {
+      "type": "string"
+    },
+    "rdfs:label": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "rcm:lifecycle": {
+      "type": "string",
+      "enum": ["encountered", "anchored", "described", "related", "reconciled", "absorbed", "invalidated"]
+    }
+  },
+  "additionalProperties": true
+}

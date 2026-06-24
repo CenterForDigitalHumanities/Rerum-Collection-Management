@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM Annotation",
+  "description": "The primary data unit in RCM — an attributable assertion with evidence.",
+  "type": "object",
+  "required": ["@id", "@type", "oa:motivatedBy", "oa:hasTarget", "oa:hasBody"],
+  "properties": {
+    "@context": {
+      "type": ["string", "object", "array"]
+    },
+    "@id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "@type": {
+      "type": "string",
+      "const": "oa:Annotation"
+    },
+    "oa:motivatedBy": {
+      "type": "string",
+      "description": "The motivation for this annotation (oa:describing, oa:linking, oa:categorizing, etc.)."
+    },
+    "oa:hasTarget": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "source": { "type": "string", "format": "uri" },
+            "selector": { "type": "object" }
+          },
+          "required": ["source"]
+        }
+      ]
+    },
+    "oa:hasBody": {
+      "type": "object",
+      "description": "The body of the annotation. Shape depends on the annotation profile."
+    },
+    "dcterms:creator": {
+      "type": "string"
+    },
+    "dcterms:created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dcterms:modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rcm:evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "rcm:provenance": {
+      "type": "string",
+      "enum": ["human", "machine", "imported"]
+    }
+  },
+  "additionalProperties": true
+}

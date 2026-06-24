@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM DisputedAssertion Body",
+  "description": "Annotation body for recording a contested or alternative claim.",
+  "type": "object",
+  "required": ["@type", "rcm:predicate", "rcm:object", "rcm:disputes"],
+  "properties": {
+    "@type": {
+      "type": "string",
+      "const": "rcm:DisputedAssertion"
+    },
+    "rcm:predicate": {
+      "type": "string"
+    },
+    "rcm:object": {},
+    "rcm:disputes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Array of annotation @ids that this assertion disputes."
+    },
+    "rcm:reason": {
+      "type": "string",
+      "description": "Explanation of why this assertion disputes the original."
+    }
+  },
+  "additionalProperties": true
+}
