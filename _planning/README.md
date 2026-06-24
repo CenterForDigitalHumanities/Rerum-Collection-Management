@@ -12,6 +12,9 @@ This archive is a dense starting package for the RERUM Collection Management rep
 - `03_development_plan.md` — phased implementation roadmap
 - `04_annotation_profiles.md` — canonical annotation profiles and examples
 - `05_ui_and_plugin_notes.md` — viewer, plugin, and interface strategy
+- `06-powerful_entities.md` — entity modeling and ontology notes
+- `07_deer_womb_concept_additions.md` — conceptual synthesis and development additions
+- `08-disposable-graph-layer.md` — notes on a derived, disposable graph layer for fast discovery
 - `schemas/rcm-context.jsonld` — broad starter JSON-LD context
 - `schemas/annotation-profiles.json` — machine-readable profile sketches
 - `examples/` — sample JSON-LD objects and annotation bundles
