@@ -4,21 +4,21 @@
  * Loads and manages project profiles.
  */
 
-import type { ProjectProfile } from "./profiles";
+import type { ProjectProfile } from "./profiles.js";
 
 export class ProfileRegistry {
-  private profiles: Map<string, ProjectProfile> = new Map();
+  private profiles: Map<string, ProjectProfile> = new Map()
 
   register(profile: ProjectProfile): void {
-    this.profiles.set(profile.id, profile);
+    this.profiles.set(profile.id, profile)
   }
 
   get(id: string): ProjectProfile | undefined {
-    return this.profiles.get(id);
+    return this.profiles.get(id)
   }
 
   all(): ProjectProfile[] {
-    return Array.from(this.profiles.values());
+    return Array.from(this.profiles.values())
   }
 
   /**
@@ -44,14 +44,14 @@ export class ProfileRegistry {
       templates: (profile["templates"] as string[]) ?? undefined,
       validation: profile["validation"] as ValidationRules | undefined,
       help: profile["help"] as Record<string, string> | undefined,
-    };
+    }
 
-    this.register(p);
-    return p;
+    this.register(p)
+    return p
   }
 }
 
-import type { ProfileField, ServiceConfig, ValidationRules } from "./profiles";
+import type { ProfileField, ServiceConfig, ValidationRules } from "./profiles.js";
 
 /**
  * Default singleton registry.

@@ -4,8 +4,8 @@
  * Resolves IIIF manifest and canvas URLs into RCM graph seeds.
  */
 
-import type { Connector, ResolutionResult, Representation, Annotation } from "./types";
-import type { Representation as RcmRepresentation } from "../core/types";
+import type { Connector, ResolutionResult, Representation, Annotation } from "./types.js";
+import type { Representation as RcmRepresentation } from "../core/types.js";
 
 export class IiifConnector implements Connector {
   readonly id = "iiif";
@@ -19,31 +19,31 @@ export class IiifConnector implements Connector {
       /\/manifests?\//.test(url) ||
       /\/manifest\/.*/.test(url) ||
       /iiif\.io/.test(url)
-    );
+    )
   }
 
   async resolve(url: string): Promise<ResolutionResult> {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url)
       if (!response.ok) {
-        return this.fallbackResult(url);
+        return this.fallbackResult(url)
       }
 
-      const manifest = await response.json();
-      return this.extractFromManifest(manifest, url);
+      const manifest = await response.json()
+      return this.extractFromManifest(manifest, url)
     } catch {
-      return this.fallbackResult(url);
+      return this.fallbackResult(url)
     }
   }
 
   private extractFromManifest(manifest: Record<string, unknown>, url: string): ResolutionResult {
-    const label = this.extractLabel(manifest);
-    const manifestId = manifest["@id"] as string | undefined;
+    const label = this.extractLabel(manifest)
+    const manifestId = manifest["@id"] as string | undefined
 
     // Suggested Thing
     const suggestedThingId = manifestId
       ? this.toTagUri(manifestId)
-      : `tag:rcm.example,${new Date().getFullYear()}:thing/iiif-${Date.now()}`;
+      : `tag:rcm.example,${new Date().getFullYear()}:thing/iiif-${Date.now()}`
 
     // Representation
     const representations: RcmRepresentation[] = [
@@ -55,13 +55,13 @@ export class IiifConnector implements Connector {
         "rcm:sourceUrl": url,
         "rcm:role": "iiif:Manifest",
       },
-    ];
+    ]
 
     // Extract canvases as additional representations
-    const bodies = manifest["sequences"]?.[0]?.["canvases"] ?? manifest["items"] ?? [];
+    const bodies = ((manifest as Record<string, unknown>)["sequences"] as Record<string, unknown>[])?.[0]?.["canvases"] ?? (manifest as Record<string, unknown>)["items"] ?? []
     for (const canvas of bodies as Record<string, unknown>[]) {
-      const canvasId = canvas["@id"] as string | undefined;
-      const canvasLabel = canvas["label"] as string | undefined;
+      const canvasId = canvas["@id"] as string | undefined
+      const canvasLabel = canvas["label"] as string | undefined
 
       if (canvasId) {
         representations.push({
@@ -71,7 +71,7 @@ export class IiifConnector implements Connector {
           "rcm:represents": suggestedThingId,
           "rcm:sourceUrl": canvasId,
           "rcm:role": "iiif:Canvas",
-        });
+        })
       }
     }
 
@@ -83,8 +83,9 @@ export class IiifConnector implements Connector {
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": suggestedThingId,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/iiif-link-${Date.now()}`,
           "@type": "rcm:RepresentationLink",
-          "rcm:representation": representations[0]!.["@id"],
+          "rcm:representation": representations[0]!["@id"],
           "rcm:role": "iiif:Manifest",
         },
         "dcterms:creator": "tag:rcm.example,2026:agent/iiif-connector",
@@ -102,7 +103,7 @@ export class IiifConnector implements Connector {
       annotations,
       connector: this.id,
       quality: "high",
-    };
+    }
   }
 
   private fallbackResult(url: string): ResolutionResult {
@@ -121,12 +122,12 @@ export class IiifConnector implements Connector {
       annotations: [],
       connector: this.id,
       quality: "low",
-    };
+    }
   }
 
   private extractLabel(manifest: Record<string, unknown>): string | undefined {
-    const label = manifest["label"];
-    if (typeof label === "string") return label;
+    const label = manifest["label"]
+    if (typeof label === "string") return label
     if (typeof label === "object" && label !== null) {
       const lbl = label as Record<string, unknown>;
       const en = lbl["en"];

@@ -5,8 +5,8 @@
  * Filter by predicate, creator, collection, evidence, date.
  */
 
-import type { Viewer, ViewerOutput, RenderOptions } from "./types";
-import type { ChonkyNode, GraphQueryResult } from "../graph/types";
+import type { Viewer, ViewerOutput, RenderOptions } from "./types.js";
+import type { ChonkyNode, GraphQueryResult } from "../graph/types.js";
 
 export class NetworkViewer implements Viewer {
   readonly id = "network";
@@ -57,7 +57,7 @@ export class NetworkViewer implements Viewer {
   renderSlice(slice: GraphQueryResult, options?: RenderOptions): ViewerOutput {
     const nodes = slice.nodes.map((n) => ({
       id: n.entity["@id"],
-      label: String((n.entity as Record<string, unknown>)["rdfs:label"] ?? n.entity["@id"]),
+      label: String((n.entity as unknown as Record<string, unknown>)["rdfs:label"] ?? n.entity["@id"]),
       type: n.entity["@type"],
       inDegree: n.inDegree,
       outDegree: n.outDegree,
@@ -86,6 +86,6 @@ export class NetworkViewer implements Viewer {
   }
 
   private escapeHtml(str: string): string {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
   }
 }

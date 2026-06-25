@@ -4,9 +4,9 @@
  * Public API for the viewer layer.
  */
 
-export * from "./types";
-export * from "./iiif";
-export * from "./pdf";
-export * from "./map";
-export * from "./network";
-export * from "./detail";
+export * from "./types.js";
+export * from "./iiif.js";
+export * from "./pdf.js";
+export * from "./map.js";
+export * from "./network.js";
+export * from "./detail.js";

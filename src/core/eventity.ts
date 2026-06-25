@@ -5,7 +5,7 @@
  * or event-like assertions.
  */
 
-import type { Thing, Annotation } from "../core/types";
+import type { Thing, Annotation } from "../core/types.js";
 
 /**
  * An Eventity is a Thing whose existence is first known through an event record.
@@ -28,8 +28,8 @@ export function createEventity(
   sourceId: string,
   suggestedType: string = "schema:Thing",
 ): Eventity {
-  const now = new Date();
-  const id = `tag:rcm.example,${now.getFullYear()}:thing/eventity-${slugify(label)}-${Date.now()}`;
+  const now = new Date()
+  const id = `tag:rcm.example,${now.getFullYear()}:thing/eventity-${slugify(label)}-${Date.now()}`
 
   return {
     "@id": id,
@@ -38,7 +38,7 @@ export function createEventity(
     "rcm:lifecycle": "encountered",
     "rcm:generatedByEvent": eventId,
     "rcm:eventSource": sourceId,
-  };
+  }
 }
 
 /**
@@ -49,7 +49,7 @@ export function createEventityLinkAnnotation(
   eventId: string,
   agentId: string,
 ): Annotation {
-  const now = new Date().toISOString();
+  const now = new Date().toISOString()
 
   return {
     "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/eventity-link-${Date.now()}`,
@@ -57,6 +57,7 @@ export function createEventityLinkAnnotation(
     "oa:motivatedBy": "oa:linking",
     "oa:hasTarget": eventityId,
     "oa:hasBody": {
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:body/eventity-link-${Date.now()}`,
       "@type": "rcm:RelationshipAssertion",
       "rcm:predicate": "rcm:generatedByEvent",
       "rcm:object": eventId,
@@ -64,9 +65,9 @@ export function createEventityLinkAnnotation(
     "dcterms:creator": agentId,
     "dcterms:created": now,
     "rcm:provenance": "human",
-  };
+  }
 }
 
 function slugify(str: string): string {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
 }

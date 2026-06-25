@@ -5,7 +5,7 @@
  * A fragment selector, text quote, or image region can be enough evidence to birth an entity anchor.
  */
 
-import type { Thing, Annotation, Representation } from "../core/types";
+import type { Thing, Annotation, Representation } from "../core/types.js";
 
 /**
  * An entity birth event — when a new entity is minted from evidence.
@@ -63,15 +63,15 @@ export function birthFromTextQuote(
   suggestedType: string = "schema:Thing",
   evidenceClass: EvidenceClass = "rcm:ObjectiveEvidence",
 ): EntityBirth {
-  const now = new Date().toISOString();
-  const thingId = `tag:rcm.example,${new Date().getFullYear()}:thing/${slugify(label)}-${Date.now()}`;
+  const now = new Date().toISOString()
+  const thingId = `tag:rcm.example,${new Date().getFullYear()}:thing/${slugify(label)}-${Date.now()}`
 
   const thing: Thing = {
     "@id": thingId,
     "@type": suggestedType,
     "rdfs:label": label,
     "rcm:lifecycle": "encountered",
-  };
+  }
 
   const birthAnnotation: Annotation = {
     "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/birth-${Date.now()}`,
@@ -84,12 +84,15 @@ export function birthFromTextQuote(
         exact: quote,
       },
     },
-    "oa:hasBody": thingId,
+    "oa:hasBody": {
+      "@id": thingId,
+      "@type": "oa:Resource",
+    },
     "dcterms:creator": agentId,
     "dcterms:created": now,
     "rcm:evidence": [sourceId],
     "rcm:provenance": "human",
-  };
+  }
 
   return {
     thing,
@@ -135,7 +138,10 @@ export function birthFromImageRegion(
         ...(selector.xywh ? { "value": selector.xywh } : {}),
       },
     },
-    "oa:hasBody": thingId,
+    "oa:hasBody": {
+      "@id": thingId,
+      "@type": "oa:Resource",
+    },
     "dcterms:creator": agentId,
     "dcterms:created": now,
     "rcm:evidence": [sourceId],
@@ -189,7 +195,10 @@ export function birthFromTimeSegment(
         endTime: formatTime(endTime),
       },
     },
-    "oa:hasBody": thingId,
+    "oa:hasBody": {
+      "@id": thingId,
+      "@type": "oa:Resource",
+    },
     "dcterms:creator": agentId,
     "dcterms:created": now,
     "rcm:evidence": [sourceId],
@@ -230,6 +239,7 @@ export function birthLacuna(
     "oa:motivatedBy": "oa:identifying",
     "oa:hasTarget": sourceId,
     "oa:hasBody": {
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:body/lacuna-${Date.now()}`,
       "@type": "rcm:PropertyAssertion",
       "rcm:predicate": "rcm:lacuna",
       "rcm:object": thingId,

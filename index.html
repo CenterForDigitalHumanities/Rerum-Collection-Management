@@ -2,14 +2,1767 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rerum Collection Management</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        header {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 0.875rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        header .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-header {
+            padding: 0.4rem 0.875rem;
+            font-size: 0.8rem;
+            color: #fff;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-header:hover { background: #444; }
+        .btn-header.primary { background: #3b82f6; border-color: #3b82f6; }
+        .btn-header.primary:hover { background: #2563eb; }
+
+        /* ── Views ── */
+        .view { display: none; flex: 1; }
+        .view.active { display: flex; }
+
+        /* ── Landing View ── */
+        #view-landing {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        #view-landing h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #view-landing p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .landing-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .btn-large {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid #d0d0d0;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .btn-large:hover { border-color: #3b82f6; background: #f0f7ff; }
+        .btn-large.primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        .btn-large.primary:hover { background: #2563eb; }
+
+        .existing-collections {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: left;
+        }
+
+        .existing-collections h3 {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .collection-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+
+        .collection-list-item:hover { border-color: #3b82f6; }
+
+        .collection-list-item .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .collection-list-item .meta {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* ── Collection View ── */
+        #view-collection {
+            flex-direction: row;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 1px solid #e5e5e5;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-header .collection-id {
+            font-size: 0.75rem;
+            color: #888;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .sidebar-search {
+            padding: 0.5rem 1rem;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.85rem;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .sidebar-search input:focus {
+            border-color: #3b82f6;
+        }
+
+        .sidebar-members {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .member-item:hover { background: #f0f7ff; }
+        .member-item.active { background: #dbeafe; }
+
+        .member-item .member-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .member-item .member-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-item .member-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .member-item .member-type {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .member-item .member-counts {
+            font-size: 0.7rem;
+            color: #aaa;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sidebar-footer {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .btn-sidebar {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #3b82f6;
+            background: #f0f7ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-sidebar:hover { background: #dbeafe; }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 2rem;
+        }
+
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .main-header .header-right {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .btn-sm:hover { background: #f5f5f5; }
+        .btn-sm.primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        .btn-sm.primary:hover { background: #2563eb; }
+
+        /* Member Cards Grid */
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .member-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .member-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .member-card h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-card .card-type {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.75rem;
+        }
+
+        .member-card .card-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .member-card .card-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ── Thing Detail View ── */
+        #view-thing {
+            flex-direction: column;
+        }
+
+        .thing-header {
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 1.25rem 2rem;
+        }
+
+        .thing-header .back-btn {
+            font-size: 0.85rem;
+            color: #3b82f6;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            padding: 0;
+        }
+
+        .thing-header .back-btn:hover { text-decoration: underline; }
+
+        .thing-header h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .thing-header .thing-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+            flex-wrap: wrap;
+        }
+
+        .thing-header .thing-meta code {
+            background: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .thing-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.85rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .btn-add {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            color: #3b82f6;
+            background: #f0f7ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-add:hover { background: #dbeafe; }
+
+        /* Assertion Card */
+        .assertion-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .assertion-card .assertion-body {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .assertion-card .assertion-body .predicate {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .assertion-card .assertion-body .object {
+            color: #1a1a1a;
+        }
+
+        .assertion-card .assertion-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .assertion-card .assertion-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+
+        .btn-icon {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.8rem;
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .btn-icon:hover { background: #f5f5f5; border-color: #d0d0d0; }
+        .btn-icon.danger:hover { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+        /* Representation Card */
+        .rep-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rep-card .rep-info {
+            font-size: 0.9rem;
+        }
+
+        .rep-card .rep-role {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .rep-card .rep-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Related Thing Card */
+        .related-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .related-card .related-info {
+            font-size: 0.9rem;
+        }
+
+        .related-card .related-predicate {
+            font-size: 0.8rem;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .related-card .related-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 560px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 1.05rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #888;
+            padding: 0.25rem;
+        }
+
+        .modal-close:hover { color: #1a1a1a; }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group .help-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+        }
+
+        .radio-group label:has(input:checked) {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+        }
+
+        .evidence-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            background: #f9fafb;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        /* ── Status Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            z-index: 200;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast.visible { display: block; }
+        .toast.loading { background: #dbeafe; color: #1e40af; }
+        .toast.error { background: #fee2e2; color: #991b1b; }
+        .toast.success { background: #dcfce7; color: #166534; }
+
+        /* ── Empty State ── */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+
+        .empty-state .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-state p {
+            margin-bottom: 1rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: #aaa;
+            flex-shrink: 0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .sidebar { width: 240px; }
+            .member-grid { grid-template-columns: 1fr; }
+            .thing-body { padding: 1rem; }
+        }
+    </style>
 </head>
 
 <body>
-    <header> header </header>
-    <section></section>
-    <footer> footer </footer>
+    <header>
+        <h1>Rerum Collection Management</h1>
+        <div class="header-actions" id="header-actions"></div>
+    </header>
+
+    <!-- ═══ Landing View ═══ -->
+    <div class="view active" id="view-landing">
+        <h2>Start Working with a Collection</h2>
+        <p>Open an existing collection or create a new one to begin aggregating Things.</p>
+        <div class="landing-actions">
+            <button class="btn-large primary" id="btn-new-collection">Create New Collection</button>
+            <button class="btn-large" id="btn-import-collection">Import Collection (JSON-LD)</button>
+        </div>
+        <div class="existing-collections" id="existing-collections"></div>
+    </div>
+
+    <!-- ═══ Collection View ═══ -->
+    <div class="view" id="view-collection">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 id="sidebar-collection-name">Collection</h2>
+                <div class="collection-id" id="sidebar-collection-id"></div>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search" placeholder="Search members…" />
+            </div>
+            <div class="sidebar-members" id="sidebar-members"></div>
+            <div class="sidebar-footer">
+                <button class="btn-sidebar" id="btn-add-member">+ Add to Collection</button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="main-header">
+                <h2>Collection Members</h2>
+                <div class="header-right">
+                    <button class="btn-sm" id="btn-export">Export</button>
+                    <button class="btn-sm primary" id="btn-add-member-main">+ Add to Collection</button>
+                </div>
+            </div>
+            <div class="member-grid" id="member-grid"></div>
+        </main>
+    </div>
+
+    <!-- ═══ Thing Detail View ═══ -->
+    <div class="view" id="view-thing">
+        <div class="thing-header">
+            <button class="back-btn" id="btn-back-collection">← Back to Collection</button>
+            <h2 id="thing-title"></h2>
+            <div class="thing-meta" id="thing-meta"></div>
+        </div>
+        <div class="thing-body" id="thing-body"></div>
+    </div>
+
+    <!-- ═══ Add to Collection Modal ═══ -->
+    <div class="modal-overlay" id="modal-add-member">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add to Collection</h3>
+                <button class="modal-close" data-close="modal-add-member">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Paste a URL to resolve</label>
+                    <input type="url" id="add-url-input" placeholder="https://example.org/iiif/manifest/..." />
+                    <div class="help-text">The URL will be resolved and added as a new Thing in your collection.</div>
+                </div>
+                <div style="text-align: center; color: #888; margin: 1rem 0;">— or —</div>
+                <div class="form-group">
+                    <label>Create a new Thing manually</label>
+                    <input type="text" id="add-thing-label" placeholder="Label (e.g. Letter from A. Gooch)" />
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="add-thing-type">
+                        <option value="schema:Thing">schema:Thing (generic)</option>
+                        <option value="crm:E22_Human-Made_Object">crm:E22_Human-Made_Object</option>
+                        <option value="schema:Person">schema:Person</option>
+                        <option value="schema:Place">schema:Place</option>
+                        <option value="schema:Event">schema:Event</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" data-close="modal-add-member">Cancel</button>
+                <button class="btn-sm primary" id="btn-confirm-add">Add to Collection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ Annotation Composer Modal ═══ -->
+    <div class="modal-overlay" id="modal-annotation">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="annotation-modal-title">New Assertion</h3>
+                <button class="modal-close" data-close="modal-annotation">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Predicate</label>
+                    <select id="ann-predicate">
+                        <option value="dc:creator">dc:creator</option>
+                        <option value="dc:date">dc:date</option>
+                        <option value="dc:description">dc:description</option>
+                        <option value="dc:subject">dc:subject</option>
+                        <option value="dc:title">dc:title</option>
+                        <option value="dc:type">dc:type</option>
+                        <option value="crm:P1_is_identified_by">crm:P1_is_identified_by</option>
+                        <option value="crm:P2_has_type">crm:P2_has_type</option>
+                        <option value="crm:P128_carries">crm:P128_carries</option>
+                        <option value="schema:about">schema:about</option>
+                        <option value="schema:location">schema:location</option>
+                        <option value="__custom__">Custom predicate…</option>
+                    </select>
+                </div>
+                <div class="form-group" id="ann-custom-predicate-group" style="display: none;">
+                    <label>Custom Predicate</label>
+                    <input type="text" id="ann-custom-predicate" placeholder="e.g. ex:hasProvenance" />
+                </div>
+                <div class="form-group">
+                    <label>Object Type</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="ann-obj-type" value="literal" checked> Literal text</label>
+                        <label><input type="radio" name="ann-obj-type" value="existing"> Existing Thing</label>
+                        <label><input type="radio" name="ann-obj-type" value="new"> New Thing</label>
+                    </div>
+                </div>
+                <div class="form-group" id="ann-obj-literal-group">
+                    <label>Object Value</label>
+                    <input type="text" id="ann-obj-literal" placeholder="e.g. Allen L. Gooch" />
+                </div>
+                <div class="form-group" id="ann-obj-existing-group" style="display: none;">
+                    <label>Select Existing Thing</label>
+                    <input type="text" id="ann-obj-existing-search" placeholder="Search collection members…" />
+                    <div id="ann-obj-existing-results"></div>
+                </div>
+                <div class="form-group" id="ann-obj-new-group" style="display: none;">
+                    <label>New Thing Label</label>
+                    <input type="text" id="ann-obj-new-label" placeholder="e.g. Camp Logan" />
+                    <label style="margin-top: 0.5rem;">New Thing Type</label>
+                    <select id="ann-obj-new-type">
+                        <option value="schema:Thing">schema:Thing</option>
+                        <option value="schema:Person">schema:Person</option>
+                        <option value="schema:Place">schema:Place</option>
+                        <option value="schema:Event">schema:Event</option>
+                        <option value="crm:E22_Human-Made_Object">crm:E22_Human-Made_Object</option>
+                    </select>
+                    <div class="help-text">This will create a new Thing and add it to the collection.</div>
+                </div>
+                <div class="form-group">
+                    <label>Evidence</label>
+                    <div id="ann-evidence-list"></div>
+                    <button class="btn-add" id="btn-add-evidence" style="margin-top: 0.4rem;">+ Add Evidence</button>
+                </div>
+                <div class="form-group">
+                    <label>Motivation</label>
+                    <select id="ann-motivation">
+                        <option value="oa:describing">oa:describing</option>
+                        <option value="oa:classifying">oa:classifying</option>
+                        <option value="oa:identifying">oa:identifying</option>
+                        <option value="oa:linking">oa:linking</option>
+                        <option value="oa:commenting">oa:commenting</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes <span style="font-weight: 400; color: #888;">(optional)</span></label>
+                    <textarea id="ann-notes" placeholder="Free-text note about this assertion…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" data-close="modal-annotation">Cancel</button>
+                <button class="btn-sm primary" id="btn-save-annotation">Save Assertion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ Evidence Attachment Modal ═══ -->
+    <div class="modal-overlay" id="modal-evidence">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Evidence</h3>
+                <button class="modal-close" data-close="modal-evidence">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>From an external URL</label>
+                    <input type="url" id="evidence-url" placeholder="https://example.org/evidence/..." />
+                </div>
+                <div style="text-align: center; color: #888; margin: 0.75rem 0;">— or —</div>
+                <div class="form-group">
+                    <label>From a Representation of this Thing</label>
+                    <select id="evidence-representation">
+                        <option value="">Select a representation…</option>
+                    </select>
+                    <div class="help-text">Select a representation, then specify a region or text quote.</div>
+                </div>
+                <div class="form-group">
+                    <label>From another Thing in this collection</label>
+                    <input type="text" id="evidence-thing-search" placeholder="Search collection members…" />
+                    <div id="evidence-thing-results"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" data-close="modal-evidence">Cancel</button>
+                <button class="btn-sm primary" id="btn-attach-evidence">Attach Evidence</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ New Collection Modal ═══ -->
+    <div class="modal-overlay" id="modal-new-collection">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Create New Collection</h3>
+                <button class="modal-close" data-close="modal-new-collection">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Collection Name</label>
+                    <input type="text" id="new-collection-name" placeholder="e.g. WWI Letters Collection" />
+                </div>
+                <div class="form-group">
+                    <label>Description <span style="font-weight: 400; color: #888;">(optional)</span></label>
+                    <textarea id="new-collection-desc" placeholder="Brief description of this collection…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" data-close="modal-new-collection">Cancel</button>
+                <button class="btn-sm primary" id="btn-create-collection">Create Collection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ Toast ═══ -->
+    <div class="toast" id="toast"></div>
+
+    <footer>
+        <p>RERUM Collection Management &mdash; A knowledge graph workbench for cultural heritage</p>
+    </footer>
+
+    <script type="module">
+        // ── Imports ──
+        import { GraphEngineImpl } from "./dist/graph/engine.js";
+        import { exportChonkyNode, exportCollection } from "./dist/ui/publication.js";
+
+        // ── Engine ──
+        const engine = new GraphEngineImpl();
+
+        // ── State ──
+        let state = {
+            currentView: "landing",
+            currentCollection: null,
+            currentThing: null,
+            collections: [],
+            pendingEvidence: [],
+        };
+
+        // ── Helpers ──
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => document.querySelectorAll(sel);
+
+        function uid(prefix = "item") {
+            return `tag:rcm.example,${new Date().getFullYear()}:${prefix}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function showToast(message, type = "success") {
+            const toast = $("#toast");
+            toast.textContent = message;
+            toast.className = `toast visible ${type}`;
+            setTimeout(() => { toast.className = "toast"; }, 3000);
+        }
+
+        // ── Persistence (localStorage) ──
+        function saveState() {
+            const data = {
+                collections: state.collections.map((c) => {
+                    const members = engine.getCollectionMembers(c["@id"]);
+                    const memberEntities = members.map((m) => engine.getNode(m)?.entity).filter(Boolean);
+                    return {
+                        collection: c,
+                        members: memberEntities,
+                    };
+                }),
+            };
+            localStorage.setItem("rcm_state", JSON.stringify(data));
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem("rcm_state");
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                for (const entry of data.collections) {
+                    const coll = entry.collection;
+                    engine.addEntity(coll);
+                    for (const member of entry.members) {
+                        engine.addEntity(member);
+                    }
+                    // Re-index membership annotations
+                    for (const member of entry.members) {
+                        const membershipAnn = {
+                            "@id": uid("annotation"),
+                            "@type": "oa:Annotation",
+                            "oa:motivatedBy": "oa:member",
+                            "oa:hasTarget": member["@id"],
+                            "oa:hasBody": {
+                                "@type": "rcm:CollectionMembership",
+                                "rcm:collection": coll["@id"],
+                            },
+                            "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                            "dcterms:created": coll["dcterms:created"] ?? new Date().toISOString(),
+                            "rcm:provenance": "imported",
+                        };
+                        engine.indexAnnotation(membershipAnn);
+                    }
+                    state.collections.push(coll);
+                }
+            } catch { /* ignore corrupt state */ }
+        }
+
+        // ── View Navigation ──
+        function showView(viewName) {
+            $$(".view").forEach((v) => v.classList.remove("active"));
+            $(`#view-${viewName}`).classList.add("active");
+            state.currentView = viewName;
+            updateHeader();
+        }
+
+        function updateHeader() {
+            const actions = $("#header-actions");
+            if (state.currentView === "landing") {
+                actions.innerHTML = "";
+            } else {
+                actions.innerHTML = `
+                    <button class="btn-header" id="hdr-back-landing">All Collections</button>
+                    <button class="btn-header" id="hdr-export">Export JSON-LD</button>
+                `;
+                $("#hdr-back-landing")?.addEventListener("click", () => {
+                    showView("landing");
+                    renderLanding();
+                });
+                $("#hdr-export")?.addEventListener("click", handleExport);
+            }
+        }
+
+        // ── Landing View ──
+        function renderLanding() {
+            const container = $("#existing-collections");
+            if (state.collections.length === 0) {
+                container.innerHTML = "";
+                return;
+            }
+
+            container.innerHTML = `
+                <h3>Your Collections</h3>
+                ${state.collections.map((c) => {
+                    const members = engine.getCollectionMembers(c["@id"]);
+                    return `
+                        <div class="collection-list-item" data-collection-id="${c["@id"]}">
+                            <div>
+                                <div class="name">${escapeHtml(c["rdfs:label"] ?? "Untitled Collection")}</div>
+                                <div class="meta">${members.length} member${members.length !== 1 ? "s" : ""}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join("")}
+            `;
+
+            container.querySelectorAll(".collection-list-item").forEach((el) => {
+                el.addEventListener("click", () => openCollection(el.dataset.collectionId));
+            });
+        }
+
+        // ── Collection View ──
+        function openCollection(collectionId) {
+            const collection = engine.getNode(collectionId)?.entity;
+            if (!collection) return;
+            state.currentCollection = collection;
+            renderCollectionView();
+            showView("collection");
+        }
+
+        function renderCollectionView() {
+            const collection = state.currentCollection;
+            if (!collection) return;
+
+            const members = engine.getCollectionMembers(collection["@id"]);
+
+            $("#sidebar-collection-name").textContent = collection["rdfs:label"] ?? "Untitled Collection";
+            $("#sidebar-collection-id").textContent = collection["@id"];
+
+            // Sidebar members
+            const sidebarMembers = $("#sidebar-members");
+            if (members.length === 0) {
+                sidebarMembers.innerHTML = `<div class="empty-state" style="padding: 2rem 1rem;"><p>No members yet.</p></div>`;
+            } else {
+                sidebarMembers.innerHTML = members.map((memberId) => {
+                    const node = engine.getNode(memberId);
+                    if (!node) return "";
+                    const thing = node.entity;
+                    const chonky = engine.assembleChonkyNode(memberId);
+                    const icon = getTypeIcon(thing["@type"]);
+                    return `
+                        <div class="member-item" data-thing-id="${memberId}">
+                            <span class="member-icon">${icon}</span>
+                            <div class="member-info">
+                                <div class="member-name">${escapeHtml(thing["rdfs:label"] ?? memberId)}</div>
+                                <div class="member-type">${escapeHtml(thing["@type"] ?? "schema:Thing")}</div>
+                                <div class="member-counts">
+                                    <span>📝 ${chonky.humanAnnotations.length}</span>
+                                    <span>🖼 ${chonky.representations.length}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                sidebarMembers.querySelectorAll(".member-item").forEach((el) => {
+                    el.addEventListener("click", () => openThingDetail(el.dataset.thingId));
+                });
+            }
+
+            // Member grid
+            const memberGrid = $("#member-grid");
+            if (members.length === 0) {
+                memberGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <p>This collection is empty. Add Things to get started.</p>
+                        <button class="btn-sm primary" id="btn-empty-add">+ Add to Collection</button>
+                    </div>
+                `;
+                $("#btn-empty-add")?.addEventListener("click", () => openModal("modal-add-member"));
+            } else {
+                memberGrid.innerHTML = members.map((memberId) => {
+                    const node = engine.getNode(memberId);
+                    if (!node) return "";
+                    const thing = node.entity;
+                    const chonky = engine.assembleChonkyNode(memberId);
+                    return `
+                        <div class="member-card" data-thing-id="${memberId}">
+                            <h3>${escapeHtml(thing["rdfs:label"] ?? memberId)}</h3>
+                            <div class="card-type">${escapeHtml(thing["@type"] ?? "schema:Thing")}</div>
+                            <div class="card-stats">
+                                <span>📝 ${chonky.humanAnnotations.length} assertions</span>
+                                <span>🖼 ${chonky.representations.length} representations</span>
+                                <span>🔗 ${chonky.relatedThings.length} relations</span>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                memberGrid.querySelectorAll(".member-card").forEach((el) => {
+                    el.addEventListener("click", () => openThingDetail(el.dataset.thingId));
+                });
+            }
+        }
+
+        // ── Thing Detail View ──
+        function openThingDetail(thingId) {
+            state.currentThing = thingId;
+            renderThingDetail();
+            showView("thing");
+        }
+
+        function renderThingDetail() {
+            const thingId = state.currentThing;
+            if (!thingId) return;
+
+            const node = engine.getNode(thingId);
+            if (!node) return;
+
+            const thing = node.entity;
+            const chonky = engine.assembleChonkyNode(thingId);
+
+            // Header
+            $("#thing-title").textContent = thing["rdfs:label"] ?? thingId;
+            $("#thing-meta").innerHTML = `
+                <code>${escapeHtml(thing["@id"])}</code>
+                <span>Type: <code>${escapeHtml(thing["@type"] ?? "schema:Thing")}</code></span>
+                ${thing["rcm:lifecycle"] ? `<span>Lifecycle: <code>${escapeHtml(thing["rcm:lifecycle"])}</code></span>` : ""}
+            `;
+
+            // Body
+            const body = $("#thing-body");
+            body.innerHTML = `
+                ${renderAssertionsSection(chonky)}
+                ${renderRepresentationsSection(chonky)}
+                ${renderRelatedThingsSection(chonky)}
+            `;
+
+            // Bind actions
+            body.querySelector("#btn-add-assertion")?.addEventListener("click", () => openAnnotationComposer(thingId));
+            body.querySelector("#btn-add-representation")?.addEventListener("click", () => addRepresentation(thingId));
+            body.querySelector("#btn-add-relationship")?.addEventListener("click", () => openAnnotationComposer(thingId, "relationship"));
+
+            // Bind assertion actions
+            body.querySelectorAll(".btn-remove-assertion").forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    removeAnnotation(btn.dataset.annotationId);
+                });
+            });
+
+            // Bind related thing navigation
+            body.querySelectorAll(".related-nav").forEach((el) => {
+                el.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    openThingDetail(el.dataset.thingId);
+                });
+            });
+        }
+
+        function renderAssertionsSection(chonky) {
+            const assertions = chonky.humanAnnotations;
+            return `
+                <div class="section">
+                    <div class="section-header">
+                        <h3>Assertions <span class="count">(${assertions.length})</span></h3>
+                        <button class="btn-add" id="btn-add-assertion">+ Add Assertion</button>
+                    </div>
+                    ${assertions.length === 0
+                        ? `<p style="color: #888; font-size: 0.9rem;">No assertions yet. Add one to describe this Thing.</p>`
+                        : assertions.map((ann) => {
+                            const body = ann["oa:hasBody"];
+                            const predicate = body?.["rcm:predicate"] ?? "";
+                            const object = body?.["rcm:object"] ?? "";
+                            const bodyType = body?.["@type"] ?? "";
+                            return `
+                                <div class="assertion-card" data-annotation-id="${ann["@id"]}">
+                                    <div class="assertion-body">
+                                        <span class="predicate">${escapeHtml(predicate)}</span>
+                                        <span> → </span>
+                                        <span class="object">${escapeHtml(String(object))}</span>
+                                        ${bodyType !== "rcm:PropertyAssertion" ? `<span style="color: #888; font-size: 0.8rem;"> (${escapeHtml(bodyType)})</span>` : ""}
+                                    </div>
+                                    <div class="assertion-meta">
+                                        <span>by ${escapeHtml(ann["dcterms:creator"] ?? "unknown")}</span>
+                                        <span>${escapeHtml(ann["dcterms:created"] ?? "")}</span>
+                                        ${ann["rcm:evidence"]?.length ? `<span>evidence: ${ann["rcm:evidence"].length}</span>` : ""}
+                                        <div class="assertion-actions">
+                                            <button class="btn-icon btn-remove-assertion" data-annotation-id="${ann["@id"]}" title="Remove">🗑</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")
+                    }
+                </div>
+            `;
+        }
+
+        function renderRepresentationsSection(chonky) {
+            const reps = chonky.representations;
+            return `
+                <div class="section">
+                    <div class="section-header">
+                        <h3>Representations <span class="count">(${reps.length})</span></h3>
+                        <button class="btn-add" id="btn-add-representation">+ Add Representation</button>
+                    </div>
+                    ${reps.length === 0
+                        ? `<p style="color: #888; font-size: 0.9rem;">No representations linked yet.</p>`
+                        : reps.map((repId) => `
+                            <div class="rep-card">
+                                <div>
+                                    <div class="rep-info">${escapeHtml(repId)}</div>
+                                    <div class="rep-role">Representation</div>
+                                </div>
+                                <div class="rep-actions">
+                                    <button class="btn-icon related-nav" data-thing-id="${repId}" title="View">👁</button>
+                                </div>
+                            </div>
+                        `).join("")
+                    }
+                </div>
+            `;
+        }
+
+        function renderRelatedThingsSection(chonky) {
+            const related = chonky.relatedThings;
+            return `
+                <div class="section">
+                    <div class="section-header">
+                        <h3>Related Things <span class="count">(${related.length})</span></h3>
+                        <button class="btn-add" id="btn-add-relationship">+ Add Relationship</button>
+                    </div>
+                    ${related.length === 0
+                        ? `<p style="color: #888; font-size: 0.9rem;">No related Things yet.</p>`
+                        : related.map((edge) => {
+                            const targetNode = engine.getNode(edge.target);
+                            const targetLabel = targetNode?.entity["rdfs:label"] ?? edge.target;
+                            return `
+                                <div class="related-card">
+                                    <div>
+                                        <div class="related-predicate">${escapeHtml(edge.predicate)}</div>
+                                        <div class="related-info">${escapeHtml(String(targetLabel))}</div>
+                                    </div>
+                                    <div class="related-actions">
+                                        <button class="btn-icon related-nav" data-thing-id="${edge.target}" title="View">👁</button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")
+                    }
+                </div>
+            `;
+        }
+
+        // ── Annotation Composer ──
+        function openAnnotationComposer(thingId, mode = "assertion") {
+            state.currentThing = thingId;
+            $("#annotation-modal-title").textContent = mode === "relationship" ? "New Relationship" : "New Assertion";
+            // Reset form
+            $("#ann-predicate").value = mode === "relationship" ? "schema:about" : "dc:creator";
+            $("#ann-obj-literal").value = "";
+            $("#ann-obj-new-label").value = "";
+            $("#ann-notes").value = "";
+            $("#ann-evidence-list").innerHTML = "";
+            state.pendingEvidence = [];
+            // Reset object type
+            document.querySelector('input[name="ann-obj-type"][value="literal"]').checked = true;
+            updateAnnotationObjectType();
+            openModal("modal-annotation");
+        }
+
+        function updateAnnotationObjectType() {
+            const type = document.querySelector('input[name="ann-obj-type"]:checked')?.value;
+            $("#ann-obj-literal-group").style.display = type === "literal" ? "" : "none";
+            $("#ann-obj-existing-group").style.display = type === "existing" ? "" : "none";
+            $("#ann-obj-new-group").style.display = type === "new" ? "" : "none";
+        }
+
+        async function saveAnnotation() {
+            const thingId = state.currentThing;
+            if (!thingId) return;
+
+            const predicateEl = $("#ann-predicate");
+            const predicate = predicateEl.value === "__custom__"
+                ? $("#ann-custom-predicate").value.trim()
+                : predicateEl.value;
+
+            if (!predicate) {
+                showToast("Please select or enter a predicate.", "error");
+                return;
+            }
+
+            const objType = document.querySelector('input[name="ann-obj-type"]:checked')?.value;
+            let objectValue;
+            let newThingId = null;
+
+            if (objType === "literal") {
+                objectValue = $("#ann-obj-literal").value.trim();
+                if (!objectValue) {
+                    showToast("Please enter an object value.", "error");
+                    return;
+                }
+            } else if (objType === "existing") {
+                // For now, use the search input as the @id
+                objectValue = $("#ann-obj-existing-search").value.trim();
+                if (!objectValue) {
+                    showToast("Please select an existing Thing.", "error");
+                    return;
+                }
+            } else if (objType === "new") {
+                const newLabel = $("#ann-obj-new-label").value.trim();
+                if (!newLabel) {
+                    showToast("Please enter a label for the new Thing.", "error");
+                    return;
+                }
+                const newType = $("#ann-obj-new-type").value;
+                newThingId = uid("thing");
+                objectValue = newThingId;
+
+                // Create the new Thing
+                const newThing = {
+                    "@id": newThingId,
+                    "@type": newType,
+                    "rdfs:label": newLabel,
+                    "rcm:lifecycle": "encountered",
+                };
+                engine.addEntity(newThing);
+
+                // Add to current collection
+                if (state.currentCollection) {
+                    addToCollection(newThing);
+                }
+            }
+
+            // Build the annotation
+            const motivation = $("#ann-motivation").value;
+            const annotation = {
+                "@id": uid("annotation"),
+                "@type": "oa:Annotation",
+                "oa:motivatedBy": motivation,
+                "oa:hasTarget": thingId,
+                "oa:hasBody": {
+                    "@id": uid("body"),
+                    "@type": "rcm:PropertyAssertion",
+                    "rcm:predicate": predicate,
+                    "rcm:object": objectValue,
+                },
+                "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                "dcterms:created": new Date().toISOString(),
+                "rcm:provenance": "human",
+            };
+
+            if (state.pendingEvidence.length > 0) {
+                annotation["rcm:evidence"] = [...state.pendingEvidence];
+            }
+
+            engine.indexAnnotation(annotation);
+            saveState();
+            closeModal("modal-annotation");
+            renderThingDetail();
+            showToast("Assertion saved.");
+        }
+
+        function removeAnnotation(annotationId) {
+            // Remove from engine entities
+            engine.removeEntity(annotationId);
+            saveState();
+            renderThingDetail();
+            showToast("Assertion removed.");
+        }
+
+        // ── Evidence ──
+        function openEvidenceModal() {
+            // Populate representations dropdown
+            const thingId = state.currentThing;
+            if (thingId) {
+                const chonky = engine.assembleChonkyNode(thingId);
+                const repSelect = $("#evidence-representation");
+                repSelect.innerHTML = `<option value="">Select a representation…</option>`;
+                for (const repId of chonky.representations) {
+                    repSelect.innerHTML += `<option value="${repId}">${escapeHtml(repId)}</option>`;
+                }
+            }
+            openModal("modal-evidence");
+        }
+
+        function attachEvidence() {
+            const url = $("#evidence-url").value.trim();
+            const repId = $("#evidence-representation").value;
+            const thingSearch = $("#evidence-thing-search").value.trim();
+
+            const source = url || repId || thingSearch;
+
+            if (!source) {
+                showToast("Please provide evidence from one of the options.", "error");
+                return;
+            }
+
+            state.pendingEvidence.push(source);
+
+            // Update evidence list in annotation composer
+            renderEvidenceList();
+
+            // Clear and close
+            $("#evidence-url").value = "";
+            $("#evidence-representation").value = "";
+            $("#evidence-thing-search").value = "";
+            closeModal("modal-evidence");
+        }
+
+        function renderEvidenceList() {
+            const list = $("#ann-evidence-list");
+            list.innerHTML = state.pendingEvidence.map((e, i) => `
+                <div class="evidence-item">
+                    <span>${escapeHtml(e)}</span>
+                    <button class="btn-icon" data-remove-evidence="${i}" title="Remove">✕</button>
+                </div>
+            `).join("");
+
+            list.querySelectorAll("[data-remove-evidence]").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    state.pendingEvidence.splice(parseInt(btn.dataset.removeEvidence, 10), 1);
+                    renderEvidenceList();
+                });
+            });
+        }
+
+        // ── Add Member ──
+        function addRepresentation(thingId) {
+            const repUrl = prompt("Enter the URL or @id of the Representation:");
+            if (!repUrl?.trim()) return;
+
+            const annotation = {
+                "@id": uid("annotation"),
+                "@type": "oa:Annotation",
+                "oa:motivatedBy": "oa:linking",
+                "oa:hasTarget": thingId,
+                "oa:hasBody": {
+                    "@id": uid("body"),
+                    "@type": "rcm:RepresentationLink",
+                    "rcm:representation": repUrl.trim(),
+                },
+                "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                "dcterms:created": new Date().toISOString(),
+                "rcm:provenance": "human",
+            };
+
+            engine.indexAnnotation(annotation);
+            saveState();
+            renderThingDetail();
+            showToast("Representation added.");
+        }
+
+        function addToCollection(thing) {
+            if (!state.currentCollection) return;
+
+            const annotation = {
+                "@id": uid("annotation"),
+                "@type": "oa:Annotation",
+                "oa:motivatedBy": "oa:member",
+                "oa:hasTarget": thing["@id"],
+                "oa:hasBody": {
+                    "@type": "rcm:CollectionMembership",
+                    "rcm:collection": state.currentCollection["@id"],
+                },
+                "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                "dcterms:created": new Date().toISOString(),
+                "rcm:provenance": "human",
+            };
+
+            engine.addEntity(thing);
+            engine.indexAnnotation(annotation);
+            saveState();
+        }
+
+        function handleAddMember() {
+            const url = $("#add-url-input").value.trim();
+            const label = $("#add-thing-label").value.trim();
+            const type = $("#add-thing-type").value;
+
+            if (url) {
+                // Resolve URL — create a Thing from it
+                const thing = {
+                    "@id": uid("thing"),
+                    "@type": type,
+                    "rdfs:label": url,
+                    "rcm:lifecycle": "encountered",
+                };
+
+                // Add source URL assertion
+                const sourceAnn = {
+                    "@id": uid("annotation"),
+                    "@type": "oa:Annotation",
+                    "oa:motivatedBy": "oa:describing",
+                    "oa:hasTarget": thing["@id"],
+                    "oa:hasBody": {
+                        "@id": uid("body"),
+                        "@type": "rcm:PropertyAssertion",
+                        "rcm:predicate": "rcm:sourceUrl",
+                        "rcm:object": url,
+                    },
+                    "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                    "dcterms:created": new Date().toISOString(),
+                    "rcm:provenance": "human",
+                };
+
+                engine.addEntity(thing);
+                engine.indexAnnotation(sourceAnn);
+                addToCollection(thing);
+            } else if (label) {
+                const thing = {
+                    "@id": uid("thing"),
+                    "@type": type,
+                    "rdfs:label": label,
+                    "rcm:lifecycle": "encountered",
+                };
+                addToCollection(thing);
+            } else {
+                showToast("Please provide a URL or a label.", "error");
+                return;
+            }
+
+            closeModal("modal-add-member");
+            renderCollectionView();
+            showToast("Thing added to collection.");
+        }
+
+        // ── Collection Creation ──
+        function handleCreateCollection() {
+            const name = $("#new-collection-name").value.trim();
+            if (!name) {
+                showToast("Please enter a collection name.", "error");
+                return;
+            }
+
+            const description = $("#new-collection-desc").value.trim();
+            const collection = {
+                "@id": uid("collection"),
+                "@type": "rcm:Collection",
+                "rdfs:label": name,
+                "dcterms:created": new Date().toISOString(),
+            };
+
+            if (description) {
+                const descAnn = {
+                    "@id": uid("annotation"),
+                    "@type": "oa:Annotation",
+                    "oa:motivatedBy": "oa:describing",
+                    "oa:hasTarget": collection["@id"],
+                    "oa:hasBody": {
+                        "@id": uid("body"),
+                        "@type": "rcm:PropertyAssertion",
+                        "rcm:predicate": "dc:description",
+                        "rcm:object": description,
+                    },
+                    "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                    "dcterms:created": new Date().toISOString(),
+                    "rcm:provenance": "human",
+                };
+                engine.indexAnnotation(descAnn);
+            }
+
+            engine.addEntity(collection);
+            state.collections.push(collection);
+            saveState();
+
+            closeModal("modal-new-collection");
+            openCollection(collection["@id"]);
+            showToast("Collection created.");
+        }
+
+        // ── Export ──
+        function handleExport() {
+            if (!state.currentCollection) return;
+
+            const members = engine.getCollectionMembers(state.currentCollection["@id"]);
+            const memberEntities = members.map((m) => engine.getNode(m)?.entity).filter(Boolean);
+
+            const jsonld = exportCollection(state.currentCollection, memberEntities, {
+                format: "jsonld",
+                pretty: true,
+                includeContext: true,
+            });
+
+            const blob = new Blob([jsonld], { type: "application/ld+json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${(state.currentCollection["rdfs:label"] ?? "collection").replace(/\s+/g, "-")}.jsonld`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Collection exported.");
+        }
+
+        // ── Modal Helpers ──
+        function openModal(id) {
+            $(`#${id}`).classList.add("active");
+        }
+
+        function closeModal(id) {
+            $(`#${id}`).classList.remove("active");
+        }
+
+        // ── Type Icons ──
+        function getTypeIcon(type) {
+            if (!type) return "📄";
+            if (type.includes("Person")) return "👤";
+            if (type.includes("Place")) return "📍";
+            if (type.includes("Event")) return "📅";
+            if (type.includes("E22") || type.includes("Object")) return "📄";
+            if (type.includes("Collection")) return "📁";
+            return "📦";
+        }
+
+        // ── Event Bindings ──
+        function bindEvents() {
+            // Landing
+            $("#btn-new-collection").addEventListener("click", () => openModal("modal-new-collection"));
+            $("#btn-import-collection").addEventListener("click", () => {
+                showToast("JSON-LD import coming soon.", "loading");
+            });
+
+            // New collection
+            $("#btn-create-collection").addEventListener("click", handleCreateCollection);
+
+            // Collection view
+            $("#btn-add-member").addEventListener("click", () => openModal("modal-add-member"));
+            $("#btn-add-member-main").addEventListener("click", () => openModal("modal-add-member"));
+            $("#btn-export").addEventListener("click", handleExport);
+
+            // Add member
+            $("#btn-confirm-add").addEventListener("click", handleAddMember);
+
+            // Thing detail
+            $("#btn-back-collection").addEventListener("click", () => {
+                if (state.currentCollection) {
+                    renderCollectionView();
+                    showView("collection");
+                }
+            });
+
+            // Annotation composer
+            $("#ann-predicate").addEventListener("change", () => {
+                $("#ann-custom-predicate-group").style.display =
+                    $("#ann-predicate").value === "__custom__" ? "" : "none";
+            });
+            $$('#ann-obj-type input[name="ann-obj-type"]').forEach((radio) => {
+                radio.addEventListener("change", updateAnnotationObjectType);
+            });
+            $("#btn-save-annotation").addEventListener("click", saveAnnotation);
+            $("#btn-add-evidence").addEventListener("click", openEvidenceModal);
+
+            // Evidence
+            $("#btn-attach-evidence").addEventListener("click", attachEvidence);
+
+            // Modal close buttons
+            $$('.modal-close[data-close]').forEach((btn) => {
+                btn.addEventListener("click", () => closeModal(btn.dataset.close));
+            });
+
+            // Close modal on overlay click
+            $$('.modal-overlay').forEach((overlay) => {
+                overlay.addEventListener("click", (e) => {
+                    if (e.target === overlay) overlay.classList.remove("active");
+                });
+            });
+
+            // Sidebar search
+            $("#sidebar-search").addEventListener("input", (e) => {
+                const query = e.target.value.toLowerCase();
+                $$('.member-item').forEach((item) => {
+                    const name = item.querySelector(".member-name")?.textContent.toLowerCase() ?? "";
+                    item.style.display = name.includes(query) ? "" : "none";
+                });
+            });
+        }
+
+        // ── Init ──
+        loadState();
+        renderLanding();
+        bindEvents();
+    </script>
 </body>
 
 </html>

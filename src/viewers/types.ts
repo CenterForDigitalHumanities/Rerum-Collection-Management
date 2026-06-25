@@ -4,7 +4,7 @@
  * Every viewer receives a graph slice, not an application database record.
  */
 
-import type { ChonkyNode, GraphQueryResult } from "../graph/types";
+import type { ChonkyNode, GraphQueryResult } from "../graph/types.js";
 
 /**
  * Base interface for all viewers.

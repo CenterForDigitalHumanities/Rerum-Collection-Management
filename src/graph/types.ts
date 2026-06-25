@@ -4,7 +4,7 @@
  * Types for graph query, traversal, and assembly.
  */
 
-import type { CoreEntity, Thing, Annotation, Collection } from "../core/types";
+import type { CoreEntity, Thing, Annotation, Collection } from "../core/types.js";
 
 /**
  * A graph node in the RCM graph.

@@ -5,10 +5,10 @@
  * Supports JSON-LD export, static HTML generation, and LDN announcement.
  */
 
-import type { CoreEntity, Annotation, Collection } from "../core/types";
-import type { ChonkyNode } from "../graph/types";
-import type { LdnAnnouncement } from "../storage/types";
-import { createCollectionAnnouncement, createThingAnnouncement } from "../storage/ldn";
+import type { CoreEntity, Annotation, Collection } from "../core/types.js";
+import type { ChonkyNode } from "../graph/types.js";
+import type { LdnAnnouncement } from "../storage/types.js";
+import { createCollectionAnnouncement, createThingAnnouncement } from "../storage/ldn.js";
 
 /**
  * Export format options.
@@ -35,41 +35,42 @@ export interface ExportOptions {
  * Export a single entity as JSON-LD.
  */
 export function exportEntity(entity: CoreEntity, options: ExportOptions = { format: "jsonld" }): string {
-  const obj: Record<string, unknown> = { ...entity };
+  const obj: Record<string, unknown> = { ...entity }
 
   if (options.includeContext ?? true) {
-    obj["@context"] = "./schemas/rcm-context.jsonld";
+    obj["@context"] = "./schemas/rcm-context.jsonld"
   }
 
   if (!options.includeProvenance) {
-    delete obj["dcterms:creator"];
-    delete obj["dcterms:created"];
-    delete obj["dcterms:modified"];
+    delete obj["dcterms:creator"]
+    delete obj["dcterms:created"]
+    delete obj["dcterms:modified"]
   }
 
-  const indent = options.pretty ? 2 : undefined;
-  return JSON.stringify(obj, null, indent);
+  const indent = options.pretty ? 2 : undefined
+  return JSON.stringify(obj, null, indent)
 }
 
 /**
  * Export a chonky node as a complete JSON-LD bundle.
  */
 export function exportChonkyNode(node: ChonkyNode, options: ExportOptions = { format: "jsonld" }): string {
-  const graph: CoreEntity[] = [node.thing];
+  const graph: CoreEntity[] = [node.thing]
 
   if (options.includeMachineAnnotations ?? true) {
-    graph.push(...node.annotations as unknown as CoreEntity[]);
-  } else {
-    graph.push(...node.humanAnnotations as unknown as CoreEntity[]);
+    graph.push(...node.annotations as unknown as CoreEntity[])
+  }
+  else {
+    graph.push(...node.humanAnnotations as unknown as CoreEntity[])
   }
 
   const bundle = {
     "@context": options.includeContext ? "./schemas/rcm-context.jsonld" : undefined,
     "@graph": graph,
-  };
+  }
 
-  const indent = options.pretty ? 2 : undefined;
-  return JSON.stringify(bundle, null, indent);
+  const indent = options.pretty ? 2 : undefined
+  return JSON.stringify(bundle, null, indent)
 }
 
 /**
@@ -80,15 +81,15 @@ export function exportCollection(
   members: CoreEntity[],
   options: ExportOptions = { format: "jsonld" },
 ): string {
-  const graph = [collection, ...members];
+  const graph = [collection, ...members]
 
   const bundle = {
     "@context": options.includeContext ? "./schemas/rcm-context.jsonld" : undefined,
     "@graph": graph,
-  };
+  }
 
-  const indent = options.pretty ? 2 : undefined;
-  return JSON.stringify(bundle, null, indent);
+  const indent = options.pretty ? 2 : undefined
+  return JSON.stringify(bundle, null, indent)
 }
 
 /**
@@ -102,7 +103,7 @@ export function generateStaticHtml(node: ChonkyNode, title?: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title ?? String(node.thing["rdfs:label"] ?? node.thing["@id"]))}</title>
   <script type="application/ld+json">
-  ${exportChonkyNode(node, { pretty: true })}
+  ${exportChonkyNode(node, { format: "jsonld", pretty: true })}
   </script>
   <style>
     body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
@@ -119,7 +120,7 @@ export function generateStaticHtml(node: ChonkyNode, title?: string): string {
   <p class="type">${escapeHtml(String(node.thing["@type"]))}</p>
 
   <h2>Assertions (${node.humanAnnotations.length})</h2>
-  ${node.humanAnnotations.map((a) => `
+  ${node.humanAnnotations.map((a: Annotation) => `
     <div class="assertion">
       <p>${escapeHtml(JSON.stringify(a["oa:hasBody"]))}</p>
       <cite>by ${escapeHtml(a["dcterms:creator"] ?? "unknown")}, ${escapeHtml(a["dcterms:created"] ?? "")}</cite>
@@ -128,7 +129,7 @@ export function generateStaticHtml(node: ChonkyNode, title?: string): string {
 
   ${node.machineAnnotations.length > 0 ? `
     <h2>Machine Suggestions (${node.machineAnnotations.length})</h2>
-    ${node.machineAnnotations.map((a) => `
+    ${node.machineAnnotations.map((a: Annotation) => `
       <div class="assertion machine">
         <p>${escapeHtml(JSON.stringify(a["oa:hasBody"]))}</p>
       </div>
@@ -137,7 +138,7 @@ export function generateStaticHtml(node: ChonkyNode, title?: string): string {
 
   ${node.disputes.length > 0 ? `
     <h2>Disputed Assertions (${node.disputes.length})</h2>
-    ${node.disputes.map((a) => `
+    ${node.disputes.map((a: Annotation) => `
       <div class="assertion dispute">
         <p>${escapeHtml(JSON.stringify(a["oa:hasBody"]))}</p>
       </div>
@@ -166,7 +167,7 @@ export function announceChonkyNode(
     node.thing["@id"],
     inboxUrl,
     `Published: ${node.thing["rdfs:label"] ?? node.thing["@id"]} (${node.annotations.length} annotations)`,
-  );
+  )
 }
 
 /**

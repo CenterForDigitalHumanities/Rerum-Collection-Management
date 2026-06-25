@@ -4,5 +4,5 @@
  * Public API for the core model module.
  */
 
-export * from "./types";
-export * from "./serialization";
+export * from "./types.js";
+export * from "./serialization.js";

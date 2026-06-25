@@ -5,7 +5,7 @@
  * LDN is treated as a first-class export/publishing mode in RCM.
  */
 
-import type { LdnAnnouncement } from "./types";
+import type { LdnAnnouncement } from "./types.js";
 
 /**
  * Create a standard LDN announcement for publishing a collection.
@@ -23,7 +23,7 @@ export function createCollectionAnnouncement(
     target: inboxUrl,
     summary: summary ?? `Published RCM collection: ${collectionId}`,
     published: new Date().toISOString(),
-  };
+  }
 }
 
 /**
@@ -42,7 +42,7 @@ export function createThingAnnouncement(
     target: inboxUrl,
     summary: summary ?? `New RCM entity: ${thingId}`,
     published: new Date().toISOString(),
-  };
+  }
 }
 
 /**
@@ -61,5 +61,5 @@ export function createAnnotationAnnouncement(
     target: inboxUrl,
     summary: summary ?? `New annotation: ${annotationId}`,
     published: new Date().toISOString(),
-  };
+  }
 }

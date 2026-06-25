@@ -5,7 +5,8 @@
  * "Paste URL, get useful graph seeds."
  */
 
-import type { RcmObject, Representation, Annotation } from "../core/types";
+import type { RcmObject, Representation, Annotation } from "../core/types.js";
+export type { Representation, Annotation } from "../core/types.js";
 
 /**
  * Result of resolving a URL into graph seeds.

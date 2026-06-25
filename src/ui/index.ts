@@ -4,6 +4,6 @@
  * Public API for the UI layer.
  */
 
-export * from "./profiles";
-export * from "./profile-registry";
-export * from "./publication";
+export * from "./profiles.js";
+export * from "./profile-registry.js";
+export * from "./publication.js";

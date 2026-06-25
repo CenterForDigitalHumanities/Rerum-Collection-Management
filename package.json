@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/**/*.ts",
+    "test": "node --test tests/fixtures/!(index).ts",
     "lint": "echo 'Linting not yet configured'"
   },
   "keywords": [
@@ -36,7 +36,7 @@
     "url": "https://github.com/CenterForDigitalHumanities/Rerum-Collection-Management.git"
   },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.0.0"

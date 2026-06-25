@@ -15,8 +15,8 @@ import type {
   AnnotationQueryOptions,
   LdnAnnouncement,
   LdnResult,
-} from "./types";
-import type { RcmObject, Annotation } from "../core/types";
+} from "./types.js";
+import type { RcmObject, Annotation } from "../core/types.js";
 
 /**
  * RERUM client implementation.
@@ -35,63 +35,63 @@ export class RerumClientImpl implements RerumClient {
    * Create a new JSON-LD object in RERUM.
    */
   async createObject(jsonld: RcmObject): Promise<CreateResult> {
-    const url = `${this.config.baseUrl}/objects`;
+    const url = `${this.config.baseUrl}/objects`
     const response = await fetch(url, {
       method: "POST",
       headers: this.headers(),
       body: JSON.stringify(jsonld),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`RERUM create failed: ${response.status} ${response.statusText}`);
+      throw new Error(`RERUM create failed: ${response.status} ${response.statusText}`)
     }
 
-    const result = await response.json();
+    const result = await response.json()
     return {
       id: result["@id"] ?? jsonld["@id"],
       url: `${this.config.baseUrl}/objects/${result["@id"] ?? jsonld["@id"]}`,
       status: response.status,
-    };
+    }
   }
 
   /**
    * Update an existing object by @id.
    */
   async updateObject(id: string, jsonld: RcmObject): Promise<UpdateResult> {
-    const url = `${this.config.baseUrl}/objects/${encodeURIComponent(id)}`;
+    const url = `${this.config.baseUrl}/objects/${encodeURIComponent(id)}`
     const response = await fetch(url, {
       method: "PUT",
       headers: this.headers(),
       body: JSON.stringify(jsonld),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`RERUM update failed: ${response.status} ${response.statusText}`);
+      throw new Error(`RERUM update failed: ${response.status} ${response.statusText}`)
     }
 
-    const result = await response.json();
+    const result = await response.json()
     return {
       id,
       version: result["@version"] ?? 1,
       status: response.status,
-    };
+    }
   }
 
   /**
    * Retrieve an object by @id.
    */
   async getObject<T extends RcmObject = RcmObject>(id: string): Promise<T | null> {
-    const url = `${this.config.baseUrl}/objects/${encodeURIComponent(id)}`;
+    const url = `${this.config.baseUrl}/objects/${encodeURIComponent(id)}`
     const response = await fetch(url, {
       headers: this.headers(),
-    });
+    })
 
-    if (response.status === 404) return null;
+    if (response.status === 404) return null
     if (!response.ok) {
-      throw new Error(`RERUM get failed: ${response.status} ${response.statusText}`);
+      throw new Error(`RERUM get failed: ${response.status} ${response.statusText}`)
     }
 
-    return response.json() as Promise<T>;
+    return response.json() as Promise<T>
   }
 
   /**
@@ -103,21 +103,21 @@ export class RerumClientImpl implements RerumClient {
       target: targetId,
       offset: String(options?.offset ?? 0),
       limit: String(options?.limit ?? 50),
-    });
+    })
 
-    if (options?.motivation) params.set("motivation", options.motivation);
-    if (options?.provenance) params.set("provenance", options.provenance);
+    if (options?.motivation) params.set("motivation", options.motivation)
+    if (options?.provenance) params.set("provenance", options.provenance)
 
-    const url = `${this.config.baseUrl}/query?${params}`;
+    const url = `${this.config.baseUrl}/query?${params}`
     const response = await fetch(url, {
       headers: this.headers(),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error(`RERUM query failed: ${response.status} ${response.statusText}`);
+      throw new Error(`RERUM query failed: ${response.status} ${response.statusText}`)
     }
 
-    return response.json() as Promise<QueryResult<Annotation>>;
+    return response.json() as Promise<QueryResult<Annotation>>
   }
 
   /**

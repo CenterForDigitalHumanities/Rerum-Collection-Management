@@ -4,7 +4,7 @@
  * Types and interfaces for the RERUM persistence layer.
  */
 
-import type { RcmObject, Annotation } from "../core/types";
+import type { RcmObject, Annotation } from "../core/types.js";
 
 /** Configuration for the RERUM client. */
 export interface RerumConfig {

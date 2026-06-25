@@ -5,9 +5,9 @@
  * Delegates to the appropriate connector based on URL pattern.
  */
 
-import type { Connector, ResolutionResult } from "./types";
-import { registry } from "./registry";
-import { IiifConnector } from "./iiif";
+import type { Connector, ResolutionResult } from "./types.js";
+import { registry } from "./registry.js";
+import { IiifConnector } from "./iiif.js";
 
 // Register built-in connectors
 registry.register(new IiifConnector());
@@ -18,27 +18,27 @@ registry.register(new IiifConnector());
  * Finds the appropriate connector and delegates resolution.
  */
 export async function resolveUrl(url: string): Promise<ResolutionResult | null> {
-  const connector = registry.findForUrl(url);
+  const connector = registry.findForUrl(url)
   if (!connector) {
     // No connector found — return a minimal fallback
-    return createFallbackResult(url);
+    return createFallbackResult(url)
   }
 
-  return connector.resolve(url);
+  return connector.resolve(url)
 }
 
 /**
  * Resolve a URL using a specific connector by ID.
  */
 export async function resolveWith(url: string, connectorId: string): Promise<ResolutionResult | null> {
-  const connector = registry.get(connectorId);
+  const connector = registry.get(connectorId)
   if (!connector) {
-    throw new Error(`Connector "${connectorId}" not found.`);
+    throw new Error(`Connector "${connectorId}" not found.`)
   }
   if (!connector.canHandle(url)) {
-    throw new Error(`Connector "${connectorId}" cannot handle URL: ${url}`);
+    throw new Error(`Connector "${connectorId}" cannot handle URL: ${url}`)
   }
-  return connector.resolve(url);
+  return connector.resolve(url)
 }
 
 /**
@@ -49,7 +49,7 @@ export function listConnectors(): Array<{ id: string; name: string; description:
     id: c.id,
     name: c.name,
     description: c.description,
-  }));
+  }))
 }
 
 /**
