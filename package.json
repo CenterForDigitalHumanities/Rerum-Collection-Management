@@ -1,0 +1,44 @@
+{
+  "name": "@rerum/collection-management",
+  "version": "0.1.0-alpha.0",
+  "description": "A modular, annotation-driven, graph-native system for cultural heritage and digital humanities resources.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./core": "./dist/core/index.js",
+    "./storage": "./dist/storage/index.js",
+    "./connectors": "./dist/connectors/index.js",
+    "./graph": "./dist/graph/index.js",
+    "./viewers": "./dist/viewers/index.js",
+    "./ui": "./dist/ui/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/**/*.ts",
+    "lint": "echo 'Linting not yet configured'"
+  },
+  "keywords": [
+    "rerum",
+    "collection-management",
+    "json-ld",
+    "web-annotation",
+    "iiif",
+    "linked-data",
+    "digital-humanities",
+    "cultural-heritage",
+    "knowledge-graph"
+  ],
+  "license": "TBD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CenterForDigitalHumanities/Rerum-Collection-Management.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

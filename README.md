@@ -73,11 +73,16 @@ RCM is designed to interoperate with:
 
 ## Development Phases
 
-- **Phase 0** — Repository shaping, ADRs, documentation
-- **Phase 1** — Core model and JSON-LD shapes
-- **Phase 2** — RERUM client layer
-- **Phase 3** — Resource resolver / connector layer
-- **Phase 4+** — UI, viewers, plugins, publication
+| Phase | Status | Description |
+|-------|--------|-------------|
+| **Phase 0** | ✅ Complete | Repository shaping, ADRs, documentation |
+| **Phase 1** | ✅ Complete | Core model, JSON-LD shapes, serialization, test fixtures |
+| **Phase 2** | ✅ Complete | RERUM client layer, LDN announcements |
+| **Phase 3** | ✅ Complete | Resource resolver / connector layer, graph engine |
+| **Phase 4** | ✅ Complete | Viewers (IIIF, PDF, Map, Network, Detail) |
+| **Phase 5** | ✅ Complete | Project profiles and configuration |
+| **Phase 6** | ✅ Complete | Entity birth, eventities, evidence classes |
+| **Phase 7** | ✅ Complete | Publication, export, static site generation |
 
 ## Planning
 
