@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM Representation",
+  "description": "A digital form that represents a Thing.",
+  "type": "object",
+  "required": ["@id", "@type", "rcm:represents"],
+  "properties": {
+    "@context": {
+      "type": ["string", "object", "array"]
+    },
+    "@id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "@type": {
+      "type": "string",
+      "const": "rcm:Representation"
+    },
+    "rdfs:label": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "rcm:represents": {
+      "type": "string",
+      "format": "uri",
+      "description": "The @id of the Thing this representation represents."
+    },
+    "rcm:sourceUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "rcm:role": {
+      "type": "string"
+    },
+    "rcm:cached": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}
