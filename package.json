@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/fixtures/!(index).ts",
+    "test": "node --test tests/fixtures/agents.ts tests/fixtures/annotations.ts tests/fixtures/collections.ts tests/fixtures/expressions.ts tests/fixtures/representations.ts tests/fixtures/things.ts",
     "lint": "echo 'Linting not yet configured'"
   },
   "keywords": [
