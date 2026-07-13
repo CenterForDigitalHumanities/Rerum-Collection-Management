@@ -64,10 +64,12 @@ export class JsonLdConnector implements Connector {
     // Build annotations for extracted properties
     if (docLabel) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-label-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": suggestedThingId,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-label-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "rdfs:label",
           "rcm:object": docLabel,
@@ -82,10 +84,12 @@ export class JsonLdConnector implements Connector {
       const types = Array.isArray(docType) ? docType : [docType]
       for (const type of types) {
         annotations.push({
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-type-${Date.now()}`,
           "@type": "oa:Annotation",
           "oa:motivatedBy": "oa:describing",
           "oa:hasTarget": suggestedThingId,
           "oa:hasBody": {
+            "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-type-${Date.now()}`,
             "@type": "rcm:PropertyAssertion",
             "rcm:predicate": "rdf:type",
             "rcm:object": type,
@@ -99,10 +103,12 @@ export class JsonLdConnector implements Connector {
 
     if (docCreator) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-creator-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": suggestedThingId,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-creator-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:creator",
           "rcm:object": docCreator,
@@ -115,10 +121,12 @@ export class JsonLdConnector implements Connector {
 
     if (docDate) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-date-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": suggestedThingId,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-date-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:created",
           "rcm:object": docDate,
@@ -131,10 +139,12 @@ export class JsonLdConnector implements Connector {
 
     if (docDescription) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-desc-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": suggestedThingId,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-desc-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:description",
           "rcm:object": docDescription,
@@ -151,10 +161,12 @@ export class JsonLdConnector implements Connector {
       const value = data[key]
       if (value) {
         annotations.push({
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/jsonld-rel-${Date.now()}`,
           "@type": "oa:Annotation",
           "oa:motivatedBy": "oa:linking",
           "oa:hasTarget": suggestedThingId,
           "oa:hasBody": {
+            "@id": `tag:rcm.example,${new Date().getFullYear()}:body/jsonld-rel-${Date.now()}`,
             "@type": "rcm:RelationshipAssertion",
             "rcm:predicate": key,
             "rcm:object": value,

@@ -51,10 +51,12 @@ export class ImageConnector implements Connector {
 
     // Annotation: link image to Thing
     annotations.push({
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/img-type-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
       "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/img-${Date.now()}`,
       "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/img-type-${Date.now()}`,
         "@type": "rcm:PropertyAssertion",
         "rcm:predicate": "rdf:type",
         "rcm:object": "schema:ImageObject",
@@ -67,10 +69,12 @@ export class ImageConnector implements Connector {
     // Annotation: content type
     if (contentType) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/img-format-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/img-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/img-format-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:format",
           "rcm:object": contentType,
@@ -84,10 +88,12 @@ export class ImageConnector implements Connector {
     // Annotation: content length
     if (contentLength) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/img-extent-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/img-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/img-extent-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:extent",
           "rcm:object": contentLength,
