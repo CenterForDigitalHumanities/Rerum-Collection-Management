@@ -101,6 +101,9 @@ export class IiifConnector implements Connector {
       suggestedType: "crm:E22_Human-Made_Object",
       representations,
       annotations,
+      suggestedTools: ["iiif-viewer"],
+      suggestedActions: ["view-iiif"],
+      warnings: [],
       connector: this.id,
       quality: "high",
     }
@@ -120,6 +123,9 @@ export class IiifConnector implements Connector {
         },
       ],
       annotations: [],
+      suggestedTools: ["iiif-viewer"],
+      suggestedActions: ["view-iiif"],
+      warnings: ["Could not fetch IIIF manifest"],
       connector: this.id,
       quality: "low",
     }

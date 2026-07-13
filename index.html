@@ -956,6 +956,19 @@
         </div>
     </div>
 
+    <!-- ═══ Proposal Review Modal ═══ -->
+    <div class="modal-overlay" id="modal-proposal-review">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Review Connector Proposal</h3>
+                <button class="modal-close" data-close="modal-proposal-review">&times;</button>
+            </div>
+            <div class="modal-body">
+                <proposal-review id="proposal-review-component"></proposal-review>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ Toast ═══ -->
     <div class="toast" id="toast"></div>
 
@@ -967,6 +980,10 @@
         // ── Imports ──
         import { GraphEngineImpl } from "./dist/graph/engine.js";
         import { exportChonkyNode, exportCollection } from "./dist/ui/publication.js";
+        import { findForUrl } from "./dist/connectors/resolver.js";
+        import "./dist/ui/action-registry.js";
+        import "./dist/ui/viewer-registry.js";
+        import "./dist/ui/proposal-review.js";
 
         // ── Engine ──
         const engine = new GraphEngineImpl();
@@ -1556,13 +1573,75 @@
             saveState();
         }
 
-        function handleAddMember() {
+        async function handleAddMember() {
             const url = $("#add-url-input").value.trim();
             const label = $("#add-thing-label").value.trim();
             const type = $("#add-thing-type").value;
 
             if (url) {
-                // Resolve URL — create a Thing from it
+                // Try to resolve URL using connector layer
+                try {
+                    const result = await findForUrl(url);
+
+                    if (result && result.suggestedType) {
+                        // Show proposal review to user
+                        const proposalComponent = $("#proposal-review-component");
+                        proposalComponent.setOptions({
+                            result,
+                            onConfirm: (resolved) => {
+                                // Create Thing from resolved data
+                                const thing = {
+                                    "@id": resolved.suggestedThingId || uid("thing"),
+                                    "@type": resolved.suggestedType || type,
+                                    "rdfs:label": resolved.suggestedLabel || url,
+                                    "rcm:lifecycle": "encountered",
+                                };
+
+                                // Add source URL assertion
+                                const sourceAnn = {
+                                    "@id": uid("annotation"),
+                                    "@type": "oa:Annotation",
+                                    "oa:motivatedBy": "oa:describing",
+                                    "oa:hasTarget": thing["@id"],
+                                    "oa:hasBody": {
+                                        "@id": uid("body"),
+                                        "@type": "rcm:PropertyAssertion",
+                                        "rcm:predicate": "rcm:sourceUrl",
+                                        "rcm:object": url,
+                                    },
+                                    "dcterms:creator": "tag:rcm.example,2026:agent/web-client",
+                                    "dcterms:created": new Date().toISOString(),
+                                    "rcm:provenance": "human",
+                                };
+
+                                engine.addEntity(thing);
+                                engine.indexAnnotation(sourceAnn);
+
+                                // Add any extracted annotations from connector
+                                if (resolved.annotations && resolved.annotations.length > 0) {
+                                    resolved.annotations.forEach(ann => {
+                                        engine.indexAnnotation(ann);
+                                    });
+                                }
+
+                                addToCollection(thing);
+                                closeModal("modal-proposal-review");
+                                renderCollectionView();
+                                showToast("Thing added to collection.");
+                            },
+                            onCancel: () => {
+                                closeModal("modal-proposal-review");
+                            }
+                        });
+
+                        openModal("modal-proposal-review");
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Connector resolution failed, falling back to simple Thing creation:", err);
+                }
+
+                // Fallback: create a simple Thing from URL
                 const thing = {
                     "@id": uid("thing"),
                     "@type": type,
