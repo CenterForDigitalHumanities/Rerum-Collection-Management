@@ -2,6 +2,7 @@
  * Audio Connector
  *
  * Resolves audio URLs into RCM graph seeds.
+ * Supports direct audio URLs (.mp3, .wav, .ogg, .flac, .aac, .m4a, .wma, .opus).
  * Proposes time-based annotation for audio content.
  */
 
@@ -13,7 +14,8 @@ export class AudioConnector implements Connector {
   readonly description = "Resolves audio URLs into RCM graph seeds with time-based annotation support.";
 
   canHandle(url: string): boolean {
-    return /\.(mp3|wav|ogg|flac|aac|m4a|wma|opus)(\?.*)?$/.test(url)
+    // Match common audio file extensions
+    return /\.(mp3|wav|ogg|flac|aac|m4a|wma|opus)(\?.*)?$/i.test(url)
   }
 
   async resolve(url: string): Promise<ResolutionResult> {
@@ -61,7 +63,11 @@ export class AudioConnector implements Connector {
         "rcm:predicate": "rdf:type",
         "rcm:object": "schema:AudioObject",
       },
+<<<<<<< HEAD
       "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+      "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/audio-connector`,
+>>>>>>> origin/main
       "dcterms:created": new Date().toISOString(),
       "rcm:evidence": [url],
     })
@@ -69,36 +75,65 @@ export class AudioConnector implements Connector {
     // Annotation: content type
     if (contentType) {
       annotations.push({
+<<<<<<< HEAD
         "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-format-${Date.now()}`,
+=======
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-content-type-${Date.now()}`,
+>>>>>>> origin/main
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/audio-${Date.now()}`,
         "oa:hasBody": {
+<<<<<<< HEAD
           "@id": `tag:rcm.example,${new Date().getFullYear()}:body/audio-format-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:format",
           "rcm:object": contentType,
         },
         "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/audio-content-type-${Date.now()}`,
+          "@type": "rcm:PropertyAssertion",
+          "rcm:predicate": "dc:format",
+          "rcm:object": contentType,
+        },
+        "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/audio-connector`,
+>>>>>>> origin/main
         "dcterms:created": new Date().toISOString(),
         "rcm:evidence": [url],
       })
     }
 
+<<<<<<< HEAD
     // Annotation: content length
     if (contentLength) {
       annotations.push({
         "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-extent-${Date.now()}`,
+=======
+    // Annotation: content length (if available)
+    if (contentLength) {
+      annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-size-${Date.now()}`,
+>>>>>>> origin/main
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/audio-${Date.now()}`,
         "oa:hasBody": {
+<<<<<<< HEAD
           "@id": `tag:rcm.example,${new Date().getFullYear()}:body/audio-extent-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:extent",
           "rcm:object": contentLength,
         },
         "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/audio-size-${Date.now()}`,
+          "@type": "rcm:PropertyAssertion",
+          "rcm:predicate": "dc:extent",
+          "rcm:object": `${contentLength} bytes`,
+        },
+        "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/audio-connector`,
+>>>>>>> origin/main
         "dcterms:created": new Date().toISOString(),
         "rcm:evidence": [url],
       })
@@ -106,6 +141,7 @@ export class AudioConnector implements Connector {
 
     // Annotation: time-based annotation support
     annotations.push({
+<<<<<<< HEAD
       "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-time-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
@@ -125,6 +161,22 @@ export class AudioConnector implements Connector {
     if (!contentType || !contentType.includes("audio")) warnings.push("Content-type may not be audio")
     if (!contentLength) warnings.push("No content-length detected")
 
+=======
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/audio-time-support-${Date.now()}`,
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:commenting",
+      "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/audio-${Date.now()}`,
+      "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/audio-time-support-${Date.now()}`,
+        "@type": "cnt:ContentAsText",
+        "cnt:chars": "This audio supports time-based annotations using IIIF Time Selector syntax (e.g., t=00:01:30,00:02:00 for 1:30-2:00).",
+      },
+      "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/audio-connector`,
+      "dcterms:created": new Date().toISOString(),
+      "rcm:provenance": "generated",
+    })
+
+>>>>>>> origin/main
     return {
       sourceUrl: url,
       suggestedThingId: `tag:rcm.example,${new Date().getFullYear()}:thing/audio-${Date.now()}`,
@@ -136,7 +188,11 @@ export class AudioConnector implements Connector {
       suggestedActions,
       warnings,
       connector: this.id,
+<<<<<<< HEAD
       quality: contentType.includes("audio") ? "high" : "medium",
+=======
+      quality: "high",
+>>>>>>> origin/main
     }
   }
 

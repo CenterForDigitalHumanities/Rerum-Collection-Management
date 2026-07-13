@@ -2,6 +2,7 @@
  * Video Connector
  *
  * Resolves video URLs into RCM graph seeds.
+ * Supports direct video URLs (.mp4, .webm, .mov, .avi, .mkv, .flv, .wmv, .m4v).
  * Proposes time-based annotation for video content.
  */
 
@@ -13,7 +14,8 @@ export class VideoConnector implements Connector {
   readonly description = "Resolves video URLs into RCM graph seeds with time-based annotation support.";
 
   canHandle(url: string): boolean {
-    return /\.(mp4|webm|mov|avi|mkv|flv|wmv|m4v)(\?.*)?$/.test(url)
+    // Match common video file extensions
+    return /\.(mp4|webm|mov|avi|mkv|flv|wmv|m4v)(\?.*)?$/i.test(url)
   }
 
   async resolve(url: string): Promise<ResolutionResult> {
@@ -61,7 +63,11 @@ export class VideoConnector implements Connector {
         "rcm:predicate": "rdf:type",
         "rcm:object": "schema:VideoObject",
       },
+<<<<<<< HEAD
       "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+      "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/video-connector`,
+>>>>>>> origin/main
       "dcterms:created": new Date().toISOString(),
       "rcm:evidence": [url],
     })
@@ -69,36 +75,65 @@ export class VideoConnector implements Connector {
     // Annotation: content type
     if (contentType) {
       annotations.push({
+<<<<<<< HEAD
         "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-format-${Date.now()}`,
+=======
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-content-type-${Date.now()}`,
+>>>>>>> origin/main
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/video-${Date.now()}`,
         "oa:hasBody": {
+<<<<<<< HEAD
           "@id": `tag:rcm.example,${new Date().getFullYear()}:body/video-format-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:format",
           "rcm:object": contentType,
         },
         "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/video-content-type-${Date.now()}`,
+          "@type": "rcm:PropertyAssertion",
+          "rcm:predicate": "dc:format",
+          "rcm:object": contentType,
+        },
+        "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/video-connector`,
+>>>>>>> origin/main
         "dcterms:created": new Date().toISOString(),
         "rcm:evidence": [url],
       })
     }
 
+<<<<<<< HEAD
     // Annotation: content length
     if (contentLength) {
       annotations.push({
         "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-extent-${Date.now()}`,
+=======
+    // Annotation: content length (if available)
+    if (contentLength) {
+      annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-size-${Date.now()}`,
+>>>>>>> origin/main
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/video-${Date.now()}`,
         "oa:hasBody": {
+<<<<<<< HEAD
           "@id": `tag:rcm.example,${new Date().getFullYear()}:body/video-extent-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:extent",
           "rcm:object": contentLength,
         },
         "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/rcm-system`,
+=======
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/video-size-${Date.now()}`,
+          "@type": "rcm:PropertyAssertion",
+          "rcm:predicate": "dc:extent",
+          "rcm:object": `${contentLength} bytes`,
+        },
+        "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/video-connector`,
+>>>>>>> origin/main
         "dcterms:created": new Date().toISOString(),
         "rcm:evidence": [url],
       })
@@ -106,6 +141,7 @@ export class VideoConnector implements Connector {
 
     // Annotation: time-based annotation support
     annotations.push({
+<<<<<<< HEAD
       "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-time-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
@@ -125,6 +161,22 @@ export class VideoConnector implements Connector {
     if (!contentType || !contentType.includes("video")) warnings.push("Content-type may not be video")
     if (!contentLength) warnings.push("No content-length detected")
 
+=======
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/video-time-support-${Date.now()}`,
+      "@type": "oa:Annotation",
+      "oa:motivatedBy": "oa:commenting",
+      "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/video-${Date.now()}`,
+      "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/video-time-support-${Date.now()}`,
+        "@type": "cnt:ContentAsText",
+        "cnt:chars": "This video supports time-based annotations using IIIF Time Selector syntax (e.g., t=00:01:30,00:02:00 for 1:30-2:00).",
+      },
+      "dcterms:creator": `tag:rcm.example,${new Date().getFullYear()}:agent/video-connector`,
+      "dcterms:created": new Date().toISOString(),
+      "rcm:provenance": "generated",
+    })
+
+>>>>>>> origin/main
     return {
       sourceUrl: url,
       suggestedThingId: `tag:rcm.example,${new Date().getFullYear()}:thing/video-${Date.now()}`,
@@ -136,7 +188,11 @@ export class VideoConnector implements Connector {
       suggestedActions,
       warnings,
       connector: this.id,
+<<<<<<< HEAD
       quality: contentType.includes("video") ? "high" : "medium",
+=======
+      quality: "high",
+>>>>>>> origin/main
     }
   }
 
