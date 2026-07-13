@@ -138,10 +138,12 @@ export class HtmlConnector implements Connector {
     // Build annotations
     if (title) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-title-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-title-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "rdfs:label",
           "rcm:object": title,
@@ -154,10 +156,12 @@ export class HtmlConnector implements Connector {
 
     if (author) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-author-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-author-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:creator",
           "rcm:object": author,
@@ -170,10 +174,12 @@ export class HtmlConnector implements Connector {
 
     if (date) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-date-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-date-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:created",
           "rcm:object": date,
@@ -186,10 +192,12 @@ export class HtmlConnector implements Connector {
 
     if (description) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-desc-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-desc-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:description",
           "rcm:object": description,
@@ -202,10 +210,12 @@ export class HtmlConnector implements Connector {
 
     if (tags) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-tags-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-tags-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:subject",
           "rcm:object": tags,
@@ -218,10 +228,12 @@ export class HtmlConnector implements Connector {
 
     if (bodyText) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/html-text-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/html-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/html-text-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "schema:text",
           "rcm:object": bodyText,

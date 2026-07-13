@@ -51,10 +51,12 @@ export class PdfConnector implements Connector {
 
     // Annotation: link PDF to Thing
     annotations.push({
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/pdf-type-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
       "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/pdf-${Date.now()}`,
       "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/pdf-type-${Date.now()}`,
         "@type": "rcm:PropertyAssertion",
         "rcm:predicate": "rdf:type",
         "rcm:object": "schema:DigitalDocument",
@@ -67,10 +69,12 @@ export class PdfConnector implements Connector {
     // Annotation: content type
     if (contentType) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/pdf-format-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/pdf-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/pdf-format-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:format",
           "rcm:object": contentType,
@@ -84,10 +88,12 @@ export class PdfConnector implements Connector {
     // Annotation: content length
     if (contentLength) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/pdf-extent-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/pdf-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/pdf-extent-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:extent",
           "rcm:object": contentLength,
@@ -100,10 +106,12 @@ export class PdfConnector implements Connector {
 
     // Annotation: page-level annotation support
     annotations.push({
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/pdf-page-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
       "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/pdf-${Date.now()}`,
       "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/pdf-page-${Date.now()}`,
         "@type": "rcm:PropertyAssertion",
         "rcm:predicate": "schema:hasPageSelector",
         "rcm:object": "oa:SpecificResource#oa:PageSelector",
@@ -125,7 +133,7 @@ export class PdfConnector implements Connector {
       representations,
       annotations,
       suggestedTools,
-      suggestedActions,
+      suggestedActions: ["annotate-page"],
       warnings,
       connector: this.id,
       quality: contentType.includes("pdf") ? "high" : "medium",
