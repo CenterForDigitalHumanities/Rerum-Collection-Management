@@ -8,9 +8,19 @@
 import type { Connector, ResolutionResult } from "./types.js";
 import { registry } from "./registry.js";
 import { IiifConnector } from "./iiif.js";
+import { HtmlConnector } from "./html.js";
+import { ImageConnector } from "./image.js";
+import { JsonLdConnector } from "./jsonld.js";
+import { PdfConnector } from "./pdf.js";
+import { GenericConnector } from "./generic.js";
 
-// Register built-in connectors
+// Register built-in connectors (order matters — first match wins)
 registry.register(new IiifConnector());
+registry.register(new HtmlConnector());
+registry.register(new ImageConnector());
+registry.register(new JsonLdConnector());
+registry.register(new PdfConnector());
+registry.register(new GenericConnector());
 
 /**
  * Resolve a URL into RCM graph seeds.

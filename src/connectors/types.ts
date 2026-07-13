@@ -10,6 +10,7 @@ export type { Representation, Annotation } from "../core/types.js";
 
 /**
  * Result of resolving a URL into graph seeds.
+ * This is a proposal, not a forced import — the user accepts/rejects/edits.
  */
 export interface ResolutionResult {
   /** The original URL that was resolved. */
@@ -20,10 +21,16 @@ export interface ResolutionResult {
   suggestedLabel?: string;
   /** Suggested type for the Thing (CIDOC CRM, schema.org, etc.). */
   suggestedType?: string;
-  /** Representations extracted from the source. */
+  /** Representations extracted from the source, with viewer suggestions. */
   representations: Representation[];
   /** Annotations extracted or suggested from the source. */
   annotations: Annotation[];
+  /** Viewer tools suggested based on detected content types. */
+  suggestedTools?: string[];
+  /** Actions the user can take from this proposal (e.g., create-iiif-manifest). */
+  suggestedActions?: string[];
+  /** Warnings about uncertainty or limitations in the resolution. */
+  warnings?: string[];
   /** Connector that produced this result. */
   connector: string;
   /** Confidence in the resolution (informational only). */
