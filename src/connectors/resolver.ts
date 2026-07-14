@@ -12,6 +12,8 @@ import { HtmlConnector } from "./html.js";
 import { ImageConnector } from "./image.js";
 import { JsonLdConnector } from "./jsonld.js";
 import { PdfConnector } from "./pdf.js";
+import { VideoConnector } from "./video.js";
+import { AudioConnector } from "./audio.js";
 import { GenericConnector } from "./generic.js";
 
 // Register built-in connectors (order matters — first match wins)
@@ -20,6 +22,8 @@ registry.register(new HtmlConnector());
 registry.register(new ImageConnector());
 registry.register(new JsonLdConnector());
 registry.register(new PdfConnector());
+registry.register(new VideoConnector());
+registry.register(new AudioConnector());
 registry.register(new GenericConnector());
 
 /**

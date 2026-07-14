@@ -52,10 +52,12 @@ export class GenericConnector implements Connector {
 
     // Annotation: link URL to Thing
     annotations.push({
+      "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/generic-type-${Date.now()}`,
       "@type": "oa:Annotation",
       "oa:motivatedBy": "oa:describing",
       "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/generic-${Date.now()}`,
       "oa:hasBody": {
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:body/generic-type-${Date.now()}`,
         "@type": "rcm:PropertyAssertion",
         "rcm:predicate": "rdf:type",
         "rcm:object": "schema:Thing",
@@ -68,10 +70,12 @@ export class GenericConnector implements Connector {
     // Annotation: content type
     if (contentType) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/generic-format-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/generic-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/generic-format-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:format",
           "rcm:object": contentType,
@@ -80,15 +84,35 @@ export class GenericConnector implements Connector {
         "dcterms:created": new Date().toISOString(),
         "rcm:evidence": [url],
       })
+
+      // Suggest tools based on content-type
+      if (contentType.includes("image")) {
+        suggestedTools.push("iiif-viewer")
+        suggestedActions.push("create-iiif-manifest")
+      } else if (contentType.includes("pdf")) {
+        suggestedTools.push("pdf-viewer", "annotation-composer")
+        suggestedActions.push("annotate-page")
+      } else if (contentType.includes("video")) {
+        suggestedTools.push("video-viewer")
+        suggestedActions.push("annotate-time")
+      } else if (contentType.includes("audio")) {
+        suggestedTools.push("audio-viewer")
+        suggestedActions.push("annotate-time")
+      } else if (contentType.includes("html")) {
+        suggestedTools.push("annotation-composer")
+        suggestedActions.push("annotate-text")
+      }
     }
 
     // Annotation: content length
     if (contentLength) {
       annotations.push({
+        "@id": `tag:rcm.example,${new Date().getFullYear()}:annotation/generic-extent-${Date.now()}`,
         "@type": "oa:Annotation",
         "oa:motivatedBy": "oa:describing",
         "oa:hasTarget": `tag:rcm.example,${new Date().getFullYear()}:thing/generic-${Date.now()}`,
         "oa:hasBody": {
+          "@id": `tag:rcm.example,${new Date().getFullYear()}:body/generic-extent-${Date.now()}`,
           "@type": "rcm:PropertyAssertion",
           "rcm:predicate": "dcterms:extent",
           "rcm:object": contentLength,
