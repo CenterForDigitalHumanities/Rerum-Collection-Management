@@ -128,9 +128,8 @@ registerViewer("video-viewer", {
       return;
     }
 
-    // Open in video player
-    const viewerUrl = `https://projectmirador.org/embed/?iiif-content=${encodeURIComponent(videoUrl)}`;
-    window.open(viewerUrl, "_blank");
+    // Open in browser's native video player
+    window.open(videoUrl, "_blank");
   },
 });
 

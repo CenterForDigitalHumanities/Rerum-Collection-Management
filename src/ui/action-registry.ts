@@ -97,8 +97,9 @@ registerAction("create-iiif-manifest", {
     });
     window.dispatchEvent(event);
 
-    // Fallback: open IIIF Manifest creator tool if available
-    const iiifCreatorUrl = `https://iiif.io/api/presentation/3.0/#21-manifest`;
+    // Fallback: open IIIF Manifesto library for programmatic manifest creation
+    // This is a more useful fallback than the API docs
+    const iiifCreatorUrl = "https://github.com/IIIF/manifesto";
     window.open(iiifCreatorUrl, "_blank");
   },
 });

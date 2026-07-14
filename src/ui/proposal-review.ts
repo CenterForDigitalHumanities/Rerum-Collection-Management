@@ -46,6 +46,11 @@ export class ProposalReview extends HTMLElement {
    * Set the proposal review options
    */
   setOptions(options: ProposalReviewOptions) {
+    // Validate that result has at least some content
+    if (!options.result || (!options.result.sourceUrl && !options.result.suggestedType)) {
+      console.warn("ProposalReview received an empty or invalid result object");
+    }
+    
     this.result = options.result;
     this.onConfirm = options.onConfirm;
     this.onCancel = options.onCancel;
