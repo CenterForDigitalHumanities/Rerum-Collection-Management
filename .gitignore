@@ -1,2 +1,27 @@
-/dist
-/node_modules
+# RERUM Collection Management
+
+## Ignore Patterns
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Planning artifacts (kept in repo for reference)
+# _planning/ is intentionally included
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/settings.json
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Test coverage
+coverage/

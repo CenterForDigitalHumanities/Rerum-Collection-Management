@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RCM Expression",
+  "description": "An intellectual derivative or rendering of a Thing.",
+  "type": "object",
+  "required": ["@id", "@type", "rcm:expresses"],
+  "properties": {
+    "@context": {
+      "type": ["string", "object", "array"]
+    },
+    "@id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "@type": {
+      "type": "string",
+      "const": "rcm:Expression"
+    },
+    "rdfs:label": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "rcm:expresses": {
+      "type": "string",
+      "format": "uri",
+      "description": "The @id of the Thing this expression expresses."
+    },
+    "rcm:mode": {
+      "type": "string",
+      "enum": ["transcription", "translation", "edition", "commentary", "ocr"]
+    },
+    "dcterms:creator": {
+      "type": "string"
+    },
+    "dcterms:created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dcterms:modified": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

@@ -88,16 +88,36 @@ Initial connectors:
 6. HTML page with basic metadata extraction;
 7. unknown URL fallback.
 
-Connector output should be a proposal, not a forced import:
+Connector output should be a proposal, not a forced import. The connector should be aggressive about detection — always extract available metadata, detect embedded content (images, video, audio), and suggest appropriate tools. The only exception is bulk import pipelines where the user explicitly opts for minimal ingestion.
 
 ```json
 {
   "thing": { "@id": "..." },
-  "representations": [],
-  "suggestedAnnotations": [],
+  "representations": [
+    { "type": "Image", "url": "...", "suggestedViewer": "iiif" },
+    { "type": "Text", "url": "...", "suggestedViewer": "annotation" }
+  ],
+  "suggestedAnnotations": [
+    { "predicate": "rdfs:label", "object": "Detected Title" },
+    { "predicate": "dcterms:creator", "object": "Author Name" },
+    { "predicate": "dcterms:created", "object": "2026-07-13" }
+  ],
+  "suggestedTools": ["iiif-viewer", "annotation-composer"],
+  "suggestedActions": ["create-iiif-manifest", "annotate-text"],
   "warnings": []
 }
 ```
+
+Detection expectations by content type:
+
+- **HTML pages**: extract title, author, date, tags, body text, embedded images
+- **Images**: propose as Representation, offer IIIF Manifest creation
+- **Video/Audio**: propose as Representation, offer time-based annotation tools
+- **PDF**: propose as Representation, offer page-level annotation
+- **IIIF Manifest**: resolve canvases, images, annotations, offer viewer
+- **JSON-LD**: extract properties, relationships, representations
+
+The user sees what was detected, accepts/rejects/edits, and the collection membership annotation is recorded. IIIF Manifest creation becomes a separate action the user triggers from the proposal.
 
 ## Phase 4 — MVP User Interface
 
