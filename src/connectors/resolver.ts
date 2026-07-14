@@ -57,6 +57,8 @@ export async function resolveAll(url: string): Promise<ResolutionResult | null> 
   }
 
   // Multiple connectors — resolve with all and merge results
+  // Note: Promise.all runs all connectors simultaneously for parallelism.
+  // For URLs matching many connectors, this could be expensive.
   const results = await Promise.all(
     connectors.map(connector => connector.resolve(url).catch(err => {
       console.warn(`Connector "${connector.id}" failed:`, err)
@@ -67,6 +69,7 @@ export async function resolveAll(url: string): Promise<ResolutionResult | null> 
   // Filter out failed resolutions
   const validResults = results.filter(Boolean) as ResolutionResult[]
 
+  // Guard against empty results array - all connectors failed
   if (validResults.length === 0) {
     return createFallbackResult(url)
   }
@@ -111,12 +114,14 @@ function mergeResults(results: ResolutionResult[], sourceUrl: string): Resolutio
     }
   }
 
-  // Merge annotations (deduplicate by @id)
+  // Merge annotations (deduplicate by @id, with generated fallback)
+  // Note: oa:hasTarget is not unique - two annotations can target the same resource.
+  // We use @id only, with a generated fallback to avoid false deduplication.
   const seenAnnotationIds = new Set<string>()
   const mergedAnnotations: ResolutionResult["annotations"] = []
   for (const result of sorted) {
     for (const ann of result.annotations || []) {
-      const annId = ann["@id"] || ann["oa:hasTarget"]
+      const annId = ann["@id"] || `ann-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
       if (!seenAnnotationIds.has(annId)) {
         seenAnnotationIds.add(annId)
         mergedAnnotations.push(ann)
@@ -134,8 +139,10 @@ function mergeResults(results: ResolutionResult[], sourceUrl: string): Resolutio
     sorted.flatMap(r => r.suggestedActions || [])
   ))
 
-  // Merge warnings (all warnings from all connectors)
-  const mergedWarnings = sorted.flatMap(r => r.warnings || [])
+  // Merge warnings (deduplicated - same warning from multiple connectors appears once)
+  const mergedWarnings = Array.from(new Set(
+    sorted.flatMap(r => r.warnings || [])
+  ))
 
   // Connector attribution
   const connectorIds = sorted.map(r => r.connector).filter(Boolean)
