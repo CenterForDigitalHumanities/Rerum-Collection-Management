@@ -37,7 +37,7 @@ export class PdfConnector implements Connector {
     const representations: Representation[] = []
     const annotations: Annotation[] = []
     const suggestedTools: string[] = ["pdf-viewer", "annotation-composer"]
-    const suggestedActions: string[] = []
+    const suggestedActions: string[] = ["view-pdf", "annotate-page"]
 
     // The PDF itself is a representation
     representations.push({

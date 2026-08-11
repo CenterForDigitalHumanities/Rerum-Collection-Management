@@ -6,6 +6,8 @@
  */
 
 import type { ResolutionResult } from "../connectors/types.js";
+import { executeAction } from "./action-registry.js";
+import { openViewer } from "./viewer-registry.js";
 
 interface ProposalReviewOptions {
   /** Connector resolution result to review */
@@ -44,6 +46,11 @@ export class ProposalReview extends HTMLElement {
    * Set the proposal review options
    */
   setOptions(options: ProposalReviewOptions) {
+    // Validate that result has at least some content
+    if (!options.result || (!options.result.sourceUrl && !options.result.suggestedType)) {
+      console.warn("ProposalReview received an empty or invalid result object");
+    }
+    
     this.result = options.result;
     this.onConfirm = options.onConfirm;
     this.onCancel = options.onCancel;
@@ -221,6 +228,12 @@ export class ProposalReview extends HTMLElement {
           border-radius: 6px;
           font-size: 0.85rem;
           color: #1e40af;
+          cursor: pointer;
+          transition: background 0.15s;
+        }
+
+        .tool-item:hover {
+          background: #dbeafe;
         }
 
         .actions-grid {
@@ -368,7 +381,7 @@ export class ProposalReview extends HTMLElement {
           <div class="section-content">
             <div class="tools-grid">
               ${this.result.suggestedTools.map(tool => `
-                <div class="tool-item">
+                <div class="tool-item" onclick="this.dispatchEvent(new CustomEvent('tool-clicked', {detail: '${tool}'}))">
                   <span>🔧</span>
                   <span>${tool}</span>
                 </div>
@@ -429,6 +442,26 @@ export class ProposalReview extends HTMLElement {
 
     this.addEventListener("cancel", () => {
       this.onCancel?.();
+    });
+
+    // Attach tool click handlers
+    this.querySelectorAll(".tool-item").forEach((el, index) => {
+      el.addEventListener("click", () => {
+        const tool = this.result.suggestedTools?.[index];
+        if (tool) {
+          openViewer(tool, this.result);
+        }
+      });
+    });
+
+    // Attach action click handlers
+    this.querySelectorAll(".action-item").forEach((el, index) => {
+      el.addEventListener("click", () => {
+        const action = this.result.suggestedActions?.[index];
+        if (action) {
+          executeAction(action, this.result);
+        }
+      });
     });
   }
 

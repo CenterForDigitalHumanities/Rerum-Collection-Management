@@ -37,7 +37,7 @@ export class ImageConnector implements Connector {
     const representations: Representation[] = []
     const annotations: Annotation[] = []
     const suggestedTools: string[] = ["iiif-viewer"]
-    const suggestedActions: string[] = ["create-iiif-manifest"]
+    const suggestedActions: string[] = ["create-iiif-manifest", "view-iiif"]
 
     // The image itself is a representation
     representations.push({
@@ -132,7 +132,7 @@ export class ImageConnector implements Connector {
       representations: [],
       annotations: [],
       suggestedTools: ["iiif-viewer"],
-      suggestedActions: ["create-iiif-manifest"],
+      suggestedActions: ["create-iiif-manifest", "view-iiif"],
       warnings: ["Failed to fetch image metadata"],
       connector: this.id,
       quality: "low",
