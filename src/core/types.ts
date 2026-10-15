@@ -38,6 +38,11 @@ export interface Labeled {
  * It may be real, conceptual, lost, inferred, disputed, or represented only indirectly.
  */
 export interface Thing extends RcmObject, Labeled {
+  /** Indicates this Thing is a provisional placeholder for an unresolved entity */
+  "rcm:placeholder"?: boolean;
+  /** Optional list of provisional identifiers or evidence IDs associated with this placeholder */
+  "rcm:provisionalIds"?: string[];
+
   "@type": "crm:E22_Human-Made_Object" | "schema:Person" | "schema:Place" | "schema:Event" | "schema:Thing" | string;
   "rcm:lifecycle"?: "encountered" | "anchored" | "described" | "related" | "reconciled" | "absorbed" | "invalidated";
 }
