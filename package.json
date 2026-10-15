@@ -14,10 +14,12 @@
     "./ui": "./dist/ui/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "vp run build",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/fixtures/agents.ts tests/fixtures/annotations.ts tests/fixtures/collections.ts tests/fixtures/expressions.ts tests/fixtures/representations.ts tests/fixtures/things.ts",
-    "lint": "echo 'Linting not yet configured'"
+        "lint": "vp lint --fix",
+        "format": "vp format --write",
+        "precommit": "vp lint --fix && vp format --write"
   },
   "keywords": [
     "rerum",
@@ -37,8 +39,10 @@
   },
   "devDependencies": {
     "tsx": "^4.23.1",
-    "typescript": "^5.9.3"
-  },
+      "typescript": "^5.9.3",
+      "vite": "^5.3.0",
+      "vite-plus": "^1.0.0"
+    },
   "engines": {
     "node": ">=22.0.0"
   }
