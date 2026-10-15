@@ -40,7 +40,7 @@ export class JsonLdConnector implements Connector {
     // Extract document properties
     const docId = data["@id"] as string | undefined
     const docType = data["@type"] as string | string[] | undefined
-    const docLabel = data["label"] || data["name"] || data["rdfs:label"]
+    const docLabel = (data["label"] ?? data["name"] ?? data["rdfs:label"]) as string | string[] | undefined
     const docCreator = data["creator"] || data["dcterms:creator"]
     const docDate = data["date"] || data["dcterms:created"] || data["dcterms:issued"]
     const docDescription = data["description"] || data["dcterms:description"]
