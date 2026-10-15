@@ -516,7 +516,7 @@ export class ProposalReview extends HTMLElement {
     }
 
     return this.result.annotations.map(ann => {
-      const body = ann["oa:hasBody"] || ann.body;
+      const body = ann["oa:hasBody"];
       const predicate = body?.["rcm:predicate"] || body?.predicate || "";
       const object = body?.["rcm:object"] || body?.object || "";
 
