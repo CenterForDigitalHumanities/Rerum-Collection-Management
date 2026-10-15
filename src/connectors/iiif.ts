@@ -102,7 +102,8 @@ export class IiifConnector implements Connector {
       representations,
       annotations,
       suggestedTools: ["iiif-viewer"],
-      suggestedActions: [],
+      suggestedActions: ["view-iiif"],
+      warnings: [],
       connector: this.id,
       quality: "high",
     }
@@ -123,8 +124,8 @@ export class IiifConnector implements Connector {
       ],
       annotations: [],
       suggestedTools: ["iiif-viewer"],
-      suggestedActions: [],
-      warnings: ["Failed to fetch or parse IIIF manifest"],
+      suggestedActions: ["view-iiif"],
+      warnings: ["Could not fetch IIIF manifest"],
       connector: this.id,
       quality: "low",
     }
