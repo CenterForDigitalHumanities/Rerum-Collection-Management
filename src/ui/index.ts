@@ -10,3 +10,4 @@ export * from "./publication.js";
 export * from "./action-registry.js";
 export * from "./viewer-registry.js";
 export * from "./proposal-review.js";
+export * from "./entity-workbench.js";
