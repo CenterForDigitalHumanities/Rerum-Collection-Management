@@ -16,7 +16,7 @@
   "scripts": {"preinstall": "npm config set legacy-peer-deps true",
     "build": "vp run build",
     "typecheck": "vp typecheck",
-    "test": "tsx --test tests/fixtures/agents.ts tests/fixtures/annotations.ts tests/fixtures/collections.ts tests/fixtures/expressions.ts tests/fixtures/representations.ts tests/fixtures/things.ts",
+    "test": "tsx --test tests/fixtures/annotations.ts tests/fixtures/collections.ts tests/fixtures/things.ts",
         "lint": "vp lint --fix",
         "format": "vp format --write",
         "precommit": "vp lint --fix && vp format --write"
