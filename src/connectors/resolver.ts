@@ -16,6 +16,15 @@ import { VideoConnector } from "./video.js";
 import { AudioConnector } from "./audio.js";
 import { GenericConnector } from "./generic.js";
 
+/** Legacy export – proxy to registry.findForUrl */
+export function findForUrl(url: string) {
+  return registry.findForUrl(url);
+}
+/** Legacy export – proxy to registry.findAllForUrl */
+export function findAllForUrl(url: string) {
+  return registry.findAllForUrl(url);
+}
+
 // Register built-in connectors (order matters — first match wins)
 registry.register(new IiifConnector());
 registry.register(new HtmlConnector());

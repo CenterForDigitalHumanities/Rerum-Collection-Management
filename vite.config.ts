@@ -7,6 +7,8 @@ import { vitePlus } from "vite-plus";
 export default defineConfig({
   plugins: [vitePlus()],
   build: {
+    preserveModules: true,
+    preserveModulesRoot: "src",
     lib: {
       // Entry point of the library
       entry: path.resolve(__dirname, "src/index.ts"),
