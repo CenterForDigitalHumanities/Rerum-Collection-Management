@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p site
           cp index.html site/
-          cp -r dist site/dist
+          cp -r ./dist ./site/dist
 
       - name: Upload site artifact
         uses: actions/upload-artifact@v4
